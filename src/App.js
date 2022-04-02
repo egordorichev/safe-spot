@@ -22,12 +22,14 @@ export default class App extends React.Component {
 		this.area.add(this.player = new Player())
 		this.area.add(this.camera = new Camera(this.player))
 
-		var item = new Item()
-		
-		item.x = 32
-		item.y = 8
+		for (let i = 0; i < 32; i++) {
+			var item = new Item()
+			
+			item.x = Math.random() * 128 - 64
+			item.y = Math.random() * 128 - 64
 
-		this.area.add(item)
+			this.area.add(item)
+		}
 	}
 
 	preload(p5) {
@@ -60,9 +62,8 @@ export default class App extends React.Component {
 		this.canvas.background(0)
 
 		p5.shader(this.shader)
-		this.shader.setUniform('u_resolution', [ p5.width, p5.height ]);
+		this.shader.setUniform('tex0', this.gameCanvas)
 		p5.rect(0, 0, p5.width, p5.height)
-		p5.image(this.gameCanvas, -p5.windowWidth / 2, -p5.windowHeight / 2)
 	}
 
 	windowResized(p5) {
