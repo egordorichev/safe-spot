@@ -28,8 +28,11 @@ export default class Area {
 			let map = this.tagged.get(tag)
 			
 			if (!map) {
-
+				map = []
+				this.tagged.set(tag, map)
 			}
+
+			map.push(e)
 		})
 	}
 
@@ -42,8 +45,15 @@ export default class Area {
 			this.entities[i].update(p5, dt)
 
 			if (this.entities[i].done) {
+				let e = this.entities[i]
+
+				e.tags.forEach(tag => {
+					let map = this.tagged.get(tag)
+					map.splice(map.indexOf(e), 1)
+				})
+
+				this.collidable.splice(this.collidable.indexOf(e), 1)
 				this.entities.splice(i, 1)
-				this.collidable.splice(this.collidable.indexOf(this.entities[i]), 1)
 			}
 		}
 

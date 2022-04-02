@@ -5,6 +5,7 @@ export default class Campfire extends Entity {
 	addComponents() {
 		this.addComponent(new AnimationComponent('fire.png'))
 		this.time = 0
+		this.tags = ["light"]
 	}
 
 	update(p5, dt) {

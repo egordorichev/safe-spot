@@ -60,4 +60,14 @@ export default class Entity {
 			this.graphicsComponent.render(p5, canvas)
 		}
 	}
+
+	distanceTo(e) {
+		let dx = e.x - this.x
+		let dy = e.y - this.y
+		return Math.sqrt(dx * dx + dy * dy)
+	}
+
+	distanceToCamera() {
+		return this.distanceTo(this.area.camera)
+	}
 }

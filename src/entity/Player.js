@@ -16,6 +16,7 @@ export default class Player extends Entity {
 		this.addComponent(new PlayerInputComponent())
 		this.addComponent(new CollisionCheckerComponent())
 		this.addComponent(new InteractorComponent(this.interact.bind(this)))
+		this.tags = ["light"]
 	}	
 
 	interact(e) {
