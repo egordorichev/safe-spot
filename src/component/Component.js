@@ -1,5 +1,9 @@
 export default class Component {
-	init() {
+	constructor() {
+		this.id = 'Component'
+	}
+	
+	init(p5) {
 
 	}
 

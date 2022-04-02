@@ -9,7 +9,15 @@ export default class App extends React.Component {
 		this.canvas = p5.createCanvas(p5.windowWidth, p5.windowHeight)
 		this.canvas.parent(ref)
 
-		this.area = new Area()
+		let context = this.canvas.elt.getContext('2d')
+		
+		context.mozImageSmoothingEnabled = false;
+		context.webkitImageSmoothingEnabled = false;
+		context.msImageSmoothingEnabled = false;
+		context.imageSmoothingEnabled = false;
+
+
+		this.area = new Area(p5)
 
 		this.area.add(this.player = new Player())
 		this.area.add(this.camera = new Camera(this.player))

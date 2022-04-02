@@ -7,7 +7,11 @@ export default class Camera extends Entity {
 		this.target = target
 		this.width = 0
 		this.height = 0
-		this.scale = 3
+		this.scale = 5
+	}
+
+	init() {
+		this.area.camera = this
 	}
 
 	update(p5, dt) {

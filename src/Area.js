@@ -1,12 +1,13 @@
 export default class Area {
-	constructor() {
+	constructor(p5) {
 		this.entities = []
+		this.p5 = p5
 	}
 
 	add(e) {
 		this.entities.push(e)
 		e.area = this
-		e.init()
+		e.init(this.p5)
 	}
 
 	destroy() {

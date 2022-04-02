@@ -12,9 +12,9 @@ export default class Entity {
 		this.addComponents()
 	}
 
-	init() {
+	init(p5) {
 		this.components.forEach(c => {
-			c.init()
+			c.init(p5)
 		})
 	}
 
@@ -35,6 +35,10 @@ export default class Entity {
 		if (c instanceof GraphicsComponent) {
 			this.graphicsComponent = c
 		}
+	}
+
+	getComponent(id) {
+		return this.components.get(id)
 	}
 
 	update(p5, dt) {
