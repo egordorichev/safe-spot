@@ -11,6 +11,7 @@ export default class Area {
 	constructor(p5) {
 		this.entities = []
 		this.collidable = []
+		this.tagged = new Map()
 		this.p5 = p5
 	}
 
@@ -22,6 +23,14 @@ export default class Area {
 		if (e.collidable) {
 			this.collidable.push(e)
 		}
+
+		e.tags.forEach(tag => {
+			let map = this.tagged.get(tag)
+			
+			if (!map) {
+
+			}
+		})
 	}
 
 	destroy() {

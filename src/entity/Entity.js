@@ -8,6 +8,7 @@ export default class Entity {
 		this.height = 16
 		this.done = false
 		this.drawOrder = 0
+		this.tags = []
 
 		this.components = new Map()
 		this.addComponents()

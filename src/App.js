@@ -24,7 +24,10 @@ export default class App extends React.Component {
 		this.area.add(this.player = new Player())
 		this.area.add(this.camera = new Camera(this.player))
 
-		this.area.add(new Campfire())
+		let campfire = new Campfire()
+		campfire.x = 64
+		campfire.y = 64
+		this.area.add(campfire)
 
 		for (let x = -16; x < 16; x++) {
 			for (let y = -16; y < 16; y++) {
@@ -39,7 +42,7 @@ export default class App extends React.Component {
 				item.x = x * 16
 				item.y = y * 16
 
-			//	this.area.add(item)
+				this.area.add(item)
 			}
 		}
 	}
@@ -74,7 +77,23 @@ export default class App extends React.Component {
 		this.canvas.background(0)
 
 		p5.shader(this.shader)
+
 		this.shader.setUniform('tex0', this.gameCanvas)
+		this.shader.setUniform('size', [ p5.windowWidth, p5.windowHeight ])
+
+		let x = 64
+		let y = 64
+
+		this.shader.setUniform('light1', [ 
+			0.5 + (x - this.camera.x) / p5.windowWidth * this.camera.scale, 
+			0.5 + (y - this.camera.y) / p5.windowHeight * this.camera.scale
+		])
+
+		this.shader.setUniform('light0', [ 
+			0.5 + (this.player.x - this.camera.x) / p5.windowWidth * this.camera.scale, 
+			0.5 + (this.player.y - this.camera.y) / p5.windowHeight * this.camera.scale
+		])
+
 		p5.rect(0, 0, p5.width, p5.height)
 	}
 
