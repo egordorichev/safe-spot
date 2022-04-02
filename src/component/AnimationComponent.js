@@ -24,7 +24,12 @@ export default class AnimationComponent extends GraphicsComponent {
 
 		p5.resetMatrix()
 		p5.scale(scale)
-		p5.translate(p5.windowWidth / scale / 2, p5.windowHeight / scale / 2)
+		
+		p5.translate(
+			this.entity.x - this.entity.area.camera.x + p5.windowWidth / scale / 2, 
+			this.entity.y - this.entity.area.camera.y + p5.windowHeight / scale / 2
+		)
+
 		p5.rotate(this.angle)
 		p5.scale(this.sx * (this.flipped ? 1 : -1), this.sy)
 		p5.image(this.sprite, -this.entity.width / 2, -this.entity.height / 2) // , 8, 8, (Math.floor((this.time * 10) % anim.len) + anim.start) * 8, 0, 8, 8);
