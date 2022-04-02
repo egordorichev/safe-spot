@@ -14,4 +14,8 @@ export default class Component {
 	update(p5, dt) {
 		
 	}
+
+	handleEvent(e, data) {
+
+	}
 }

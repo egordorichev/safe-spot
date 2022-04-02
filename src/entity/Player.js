@@ -2,6 +2,8 @@ import Entity from '../entity/Entity'
 import PlayerGraphicsComponent from '../component/PlayerGraphicsComponent'
 import PlayerInputComponent from '../component/PlayerInputComponent'
 import CollisionCheckerComponent from '../component/CollisionCheckerComponent'
+import InteractorComponent from '../component/InteractorComponent'
+import Item from './Item'
 
 export default class Player extends Entity {
 	init(p5) {
@@ -12,27 +14,31 @@ export default class Player extends Entity {
 	addComponents() {
 		this.addComponent(new PlayerGraphicsComponent())
 		this.addComponent(new PlayerInputComponent())
-		this.addComponent(new CollisionCheckerComponent(this.onCollisionStart.bind(this), this.onCollisionEnd.bind(this)))
+		this.addComponent(new CollisionCheckerComponent())
+		this.addComponent(new InteractorComponent(this.interact.bind(this)))
 	}	
 
-	onCollisionStart(e) {
-		console.log('start ', e)
-	}
-
-	onCollisionEnd(e) {
-		console.log('end ', e)
+	interact(e) {
+		if (e instanceof Item) {
+			this.pickup(e)
+		}
 	}
 
 	pickup(item) {
-		this.dropItem()
-		item.owner = this
+		if (!this.dropItem()) {
+			item.owner = this
+			this.item = item
+		}
 	}
 
 	dropItem() {
 		if (this.item == null) {
-			return
+			return false
 		}
 
-		this.item.owner = this
+		this.item.owner = null
+		this.item = null
+
+		return true
 	}
 }

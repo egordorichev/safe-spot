@@ -24,6 +24,12 @@ export default class Entity {
 		})
 	}
 
+	handleEvent(e, data) {
+		this.components.forEach(c => {
+			c.handleEvent(e, data)
+		})
+	}
+
 	addComponents() {
 
 	}
@@ -47,9 +53,9 @@ export default class Entity {
 		})
 	}
 	
-	render(p5) {
+	render(p5, canvas) {
 		if (this.graphicsComponent) {
-			this.graphicsComponent.render(p5)
+			this.graphicsComponent.render(p5, canvas)
 		}
 	}
 }

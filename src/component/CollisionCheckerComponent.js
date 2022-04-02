@@ -10,11 +10,8 @@ function isColliding(a, b) {
 }
 
 export default class CollisionCheckerComponent extends Component {
-	constructor(onCollisionStart, onCollisionEnd) {
+	constructor() {
 		super()
-
-		this.onCollisionStart = onCollisionStart
-		this.onCollisionEnd = onCollisionEnd
 		this.collidingWith = []
 	}
 
@@ -25,15 +22,30 @@ export default class CollisionCheckerComponent extends Component {
 
 				if (index === -1) {
 					this.collidingWith.push(e)
-					this.onCollisionStart(e)
+					this.entity.handleEvent('collision_started', {
+						entity: e
+					})
+
+					e.handleEvent('collision_started', {
+						entity: this.entity
+					})
 				}
 			}
 		})
 
 		for (let i = this.collidingWith.length - 1; i >= 0; i--) {
-			if (!isColliding(this.collidingWith[i], this.entity)) {
-				this.onCollisionEnd(this.collidingWith[i])
+			let e = this.collidingWith[i]
+
+			if (!isColliding(e, this.entity)) {
 				this.collidingWith.splice(i, 1)
+
+				this.entity.handleEvent('collision_ended', {
+					entity: e
+				})
+
+				e.handleEvent('collision_ended', {
+					entity: this.entity
+				})
 			}
 		}
 	}

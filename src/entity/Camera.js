@@ -21,29 +21,29 @@ export default class Camera extends Entity {
 		this.y += (this.target.y - this.y) * s
 	}
 
-	apply(p5) {
-		p5.scale(this.scale)
-		p5.translate(
-			-this.x + p5.windowWidth / 2 / this.scale,
-			-this.y + p5.windowHeight / 2 / this.scale)
+	apply(p5, canvas) {
+		canvas.scale(this.scale)
+		canvas.translate(
+			-this.x + canvas.width / 2 / this.scale,
+			-this.y + canvas.height / 2 / this.scale)
 	}
 
-	renderGrid(p5) {
-		p5.stroke(100, 100, 100, 50)
-		p5.strokeWeight(1)
+	renderGrid(p5, canvas) {
+		canvas.stroke(100, 100, 100, 50)
+		canvas.strokeWeight(1)
 
 		const doubleScale = 2 * this.scale
-		const width = p5.windowWidth
-		const height = p5.windowHeight
+		const width = canvas.width
+		const height = canvas.height
 		const cx = this.x
 		const cy = this.y
 
 		for (var x = (cx - width / doubleScale) - cx % 32; x <= cx + 8 + width / doubleScale; x += 32) {
-			p5.line(x, cy - height / doubleScale, x, cy + 8 + height / doubleScale)
+			canvas.line(x, cy - height / doubleScale, x, cy + 8 + height / doubleScale)
 		}
 
 		for (var y = (cy - height / doubleScale) - cy % 32; y <= cy + 8 + height / doubleScale; y += 32) {
-			p5.line(cx - width / doubleScale, y, cx + 8 + width / doubleScale, y)
+			canvas.line(cx - width / doubleScale, y, cx + 8 + width / doubleScale, y)
 		}
 	}
 }

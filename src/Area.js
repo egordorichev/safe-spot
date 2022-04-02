@@ -32,7 +32,7 @@ export default class Area {
 		this.entities.sort((a, b) => a.y > b.y ? 1 : -1)
 	}
 
-	render(p5) {
-		this.entities.forEach(e => e.render(p5))
+	render(p5, canvas) {
+		this.entities.forEach(e => e.render(p5, canvas))
 	}
 }
