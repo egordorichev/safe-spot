@@ -9,6 +9,9 @@ export default class AnimationComponent extends GraphicsComponent {
 		this.sx = 1
 		this.sy = 1
 		this.angle = 0
+		this.time = 0
+		this.animStart = 0
+		this.animLength = 1
 
 		this.id = 'AnimationComponent'
 	}
@@ -16,6 +19,10 @@ export default class AnimationComponent extends GraphicsComponent {
 	init(p5) {
 		super.init(p5)
 		this.sprite = p5.loadImage(this.file)
+	}
+	
+	update(p5, dt) {
+		this.time += dt * 0.003
 	}
 
 	render(p5, canvas) {
@@ -32,7 +39,9 @@ export default class AnimationComponent extends GraphicsComponent {
 
 		canvas.rotate(this.angle)
 		canvas.scale(this.sx * (this.flipped ? 1 : -1), this.sy)
-		canvas.image(this.sprite, -this.entity.width / 2, -this.entity.height / 2) // , 8, 8, (Math.floor((this.time * 10) % anim.len) + anim.start) * 8, 0, 8, 8);
+		canvas.image(this.sprite, -this.entity.width / 2, -this.entity.height, 
+			this.entity.width, this.entity.height, 
+			(Math.floor((this.time) % this.animLength) + this.animStart) * this.entity.width, 0, this.entity.width, this.entity.height)
 
 		p5.pop()
 

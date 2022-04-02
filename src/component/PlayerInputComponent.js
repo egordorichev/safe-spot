@@ -4,6 +4,8 @@ export default class PlayerInputComponent extends Component {
 	constructor() {
 		super()
 		this.id = 'PlayerInputComponent'
+		this.time = 0
+		this.wasPressed = false
 	}
 
 	update(p5, dt) {
@@ -30,6 +32,7 @@ export default class PlayerInputComponent extends Component {
 		}
 
 		let d = Math.sqrt(vx * vx + vy * vy)
+		let wasPressed
 
 		if (d >= 1) {
 			vx /= d
@@ -39,8 +42,29 @@ export default class PlayerInputComponent extends Component {
 
 			this.entity.x += vx * s
 			this.entity.y += vy * s	
+			wasPressed = true
+		} else {
+			wasPressed = false
 		}
 
-		component.angle += ((d >= 1 ? -0.3 : 0) * (component.flipped ? 1 : -1) - component.angle) * 0.03 * dt
+		if (wasPressed != this.wasPressed) {
+			if (!wasPressed) {
+				component.sx = 2
+				component.sy = 0
+			} else {
+				component.sx = 0
+				component.sy = 2
+			}
+		}
+
+		this.wasPressed = wasPressed
+
+		this.time += dt * 0.001
+		component.angle += ((d >= 1 ? -0.3 : Math.sin(this.time) * 0.05) * (component.flipped ? 1 : -1) - component.angle) * 0.03 * dt
+
+		let s = dt * 0.01
+
+		component.sx += (1 - component.sx) * s
+		component.sy += (1 - component.sy) * s
 	}
 }

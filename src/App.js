@@ -4,6 +4,8 @@ import Area from './Area'
 import Camera from './entity/Camera'
 import Item from './entity/Item'
 import Player from './entity/Player'
+import Tile from './entity/Tile'
+import Campfire from './entity/Campfire'
 
 export default class App extends React.Component {
 	setup(p5, ref) {
@@ -22,13 +24,23 @@ export default class App extends React.Component {
 		this.area.add(this.player = new Player())
 		this.area.add(this.camera = new Camera(this.player))
 
-		for (let i = 0; i < 32; i++) {
-			var item = new Item()
-			
-			item.x = Math.random() * 128 - 64
-			item.y = Math.random() * 128 - 64
+		this.area.add(new Campfire())
 
-			this.area.add(item)
+		for (let x = -16; x < 16; x++) {
+			for (let y = -16; y < 16; y++) {
+				let d = Math.sqrt(x * x + y * y)
+
+				if (d > 8 && Math.random() * 16 < d) {
+					continue
+				}
+
+				var item = new Tile()
+				
+				item.x = x * 16
+				item.y = y * 16
+
+			//	this.area.add(item)
+			}
 		}
 	}
 

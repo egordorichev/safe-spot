@@ -1,3 +1,12 @@
+function isColliding(a, b) {
+	return !(
+		((a.y + a.height) < (b.y)) ||
+		(a.y > (b.y + b.height)) ||
+		((a.x + a.width) < b.x) ||
+		(a.x > (b.x + b.width))
+	)
+}
+
 export default class Area {
 	constructor(p5) {
 		this.entities = []
@@ -29,10 +38,22 @@ export default class Area {
 			}
 		}
 
-		this.entities.sort((a, b) => a.y > b.y ? 1 : -1)
+		this.entities.sort((a, b) => {
+			if (a.drawOrder === b.drawOrder) {
+				return a.y + a.height < b.y + b.height ? -1 : 1
+			}
+
+			return a.drawOrder > b.drawOrder ? 1 : -1
+		})
 	}
 
 	render(p5, canvas) {
-		this.entities.forEach(e => e.render(p5, canvas))
+		let box = {
+			x: this.camera.x - p5.windowWidth / 2 - 16,
+			y: this.camera.y - p5.windowHeight / 2 - 16,
+			width: p5.windowWidth + 32,
+			height: p5.windowHeight + 32
+		}
+		this.entities.forEach(e => isColliding(e, box) && e.render(p5, canvas))
 	}
 }

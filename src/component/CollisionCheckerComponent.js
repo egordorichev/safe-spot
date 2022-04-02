@@ -6,7 +6,7 @@ function isColliding(a, b) {
 		(a.y > (b.y + b.height)) ||
 		((a.x + a.width) < b.x) ||
 		(a.x > (b.x + b.width))
-	);
+	)
 }
 
 export default class CollisionCheckerComponent extends Component {
