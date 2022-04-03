@@ -14,6 +14,7 @@ uniform vec3 light6;
 uniform vec3 light7;
 uniform vec2 size;
 uniform float time;
+uniform float enabled;
 
 const float PI = 3.1415926535;
 
@@ -130,5 +131,5 @@ void main() {
 
   float vv = max(0.0, 1.0 - d * d * d * 80.0);
 
-	gl_FragColor = vec4(color.r * vv + gray * (1.0 - vv), color.g * vv + gray * (1.0 - vv), color.b * vv + gray * (1.0 - vv), 1.0 - d * 2.5); // 1.0 - l * 0.8);
+	gl_FragColor = enabled < 0.5 ? color: vec4(color.r * vv + gray * (1.0 - vv), color.g * vv + gray * (1.0 - vv), color.b * vv + gray * (1.0 - vv), 1.0 - d * 2.5); // 1.0 - l * 0.8);
 }

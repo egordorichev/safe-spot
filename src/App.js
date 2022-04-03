@@ -14,6 +14,7 @@ export default class App extends React.Component {
 	setup(p5, ref) {
 		this.canvas = p5.createCanvas(p5.windowWidth, p5.windowHeight, p5.WEBGL)
 		this.canvas.parent(ref)
+		this.ref = ref
 
 		let context = this.canvas.elt.getContext('webgl')
 		
@@ -44,6 +45,8 @@ export default class App extends React.Component {
 		let map = new Map()
 		this.area.add(map)
 		this.area.map = map
+		this.gameOver = false
+		this.menu = true
 
 		for (let x = -8; x < 8; x++) {
 			for (let y = -8; y < 8; y++) {
@@ -86,6 +89,8 @@ export default class App extends React.Component {
 		context.webkitImageSmoothingEnabled = false;
 		context.msImageSmoothingEnabled = false;
 		context.imageSmoothingEnabled = false;
+
+		this.font = p5.loadFont('font.ttf')
 	}
 
 	destroy() {
@@ -93,16 +98,13 @@ export default class App extends React.Component {
 	}
 
 	draw(p5) {
-		this.time += p5.deltaTime * 0.01
-		this.area.update(p5, p5.deltaTime)
-
-		this.gameCanvas.background(0)
-
-		this.gameCanvas.resetMatrix()
-		this.camera.apply(p5, this.gameCanvas)
-		this.camera.renderGrid(p5, this.gameCanvas)
-
-		this.area.render(p5, this.gameCanvas)
+		if (this.gameOver) {
+			this.drawGameOver(p5)
+		} else if (this.menu) {
+			this.drawMenu(p5)
+		} else {
+			this.drawGame(p5)
+		}
 
 		this.canvas.background(0)
 
@@ -134,6 +136,74 @@ export default class App extends React.Component {
 		}
 
 		p5.rect(0, 0, p5.width, p5.height)
+	}
+
+	drawMenu(p5) {
+		this.gameCanvas.background(0)
+
+		this.gameCanvas.resetMatrix()
+		this.gameCanvas.textAlign(p5.CENTER)
+		
+		this.gameCanvas.noStroke()
+		this.gameCanvas.fill(255, 0, 0)
+		this.gameCanvas.textSize(128)
+		this.gameCanvas.textFont(this.font)
+		this.gameCanvas.text('SAFE SPOT', p5.windowWidth / 2, p5.windowHeight / 2)
+		this.gameCanvas.fill(255)
+		this.gameCanvas.textSize(32)
+		this.gameCanvas.text('Press X to start', p5.windowWidth / 2, p5.windowHeight / 2 + 64)
+
+		if (p5.keyIsDown(88)) {
+			this.menu = false
+			this.gameOver = false
+		}
+	}
+
+	drawGameOver(p5) {
+		p5.shader(this.shader)
+		this.shader.setUniform('enabled', 0)
+
+		this.gameCanvas.background(0)
+
+		this.gameCanvas.resetMatrix()
+		this.gameCanvas.textAlign(p5.CENTER)
+		
+		this.gameCanvas.noStroke()
+		this.gameCanvas.fill(255, 0, 0)
+		this.gameCanvas.textSize(128)
+		this.gameCanvas.textFont(this.font)
+		this.gameCanvas.text('YOU DIED', p5.windowWidth / 2, p5.windowHeight / 2)
+		this.gameCanvas.fill(255)
+		this.gameCanvas.textSize(32)
+		this.gameCanvas.text('Press F to continue', p5.windowWidth / 2, p5.windowHeight / 2 + 64)
+
+		if (p5.keyIsDown(70)) {
+			this.menu = true
+			this.gameOver = false
+
+			window.location.reload()
+		}
+	}
+
+	drawGame(p5) {
+		p5.shader(this.shader)
+		this.shader.setUniform('enabled', 1)
+
+		this.time += p5.deltaTime * 0.01
+		this.area.update(p5, p5.deltaTime)
+
+		this.gameCanvas.background(0)
+
+		this.gameCanvas.resetMatrix()
+		this.camera.apply(p5, this.gameCanvas)
+		this.camera.renderGrid(p5, this.gameCanvas)
+
+		this.area.render(p5, this.gameCanvas)
+
+		if (this.area.tagged.get('light').length == 0) {
+			console.log('game over')
+			this.gameOver = true
+		}
 	}
 
 	windowResized(p5) {

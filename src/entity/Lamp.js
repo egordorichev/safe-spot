@@ -43,9 +43,13 @@ export default class Lamp extends Item {
 		super.update(p5, dt)
 		this.time += dt * 0.001
 
-		this.lightRadius = Math.max(0.2, this.lr - dt * 0.000001)
+		this.lightRadius = this.lr - dt//* 0.000001
 		this.lr = this.lightRadius
 		this.lightRadius += Math.cos(this.time) * 0.001
+
+		if (this.lr <= 0) {
+			this.removeTag("light")
+		}
 	}
 
 	render(p5, canvas) {
