@@ -44,7 +44,7 @@ export default class Map extends Entity {
 	}
 
 	update(p5, dt) {
-		this.time += dt * 0.001
+		this.time += dt * 0.005
 
 		if (this.time >= 1) {
 			this.time = 0

@@ -11,6 +11,7 @@ export default class Plant extends Entity {
 		this.addComponent(animation)
 
 		animation.layer = ~~(Math.random() * 5)
+		this.watered = false
 
 		this.addComponent(new InteractableComponent(this.interact.bind(this)))
 	}
@@ -34,10 +35,61 @@ export default class Plant extends Entity {
 				}
 			}
 		}
+
+		this.time += dt * 0.001
+
+		let component = this.getComponent('AnimationComponent')
+		
+		if (component.layer == 5) {
+			if (component.animStart == 0) {
+				this.time = 0
+			}
+
+			if (component.animStart == 1 && !this.watered) {
+				this.time = 0
+			}
+
+			if (this.time >= 10) {
+				component.animStart++
+				this.time = 0
+
+				if (component.animStart == 3) {
+					component.animStart = 0
+					component.layer = ~~(Math.random() * 5)
+					this.time = Math.random() * 30
+				}
+			}
+		} else if (this.time >= 100) {
+			this.done = true
+
+			let stick = new Stick()
+			stick.x = this.x
+			stick.y = this.y
+			this.area.add(stick)
+		}
 	}
 
 	interact(e) {
 		if (e instanceof Player) {
+			let component = this.getComponent('AnimationComponent')
+			
+			if (component.layer == 5) {
+				if (component.animStart != 0) {
+					return true
+				}
+
+				let item = e.item
+
+				console.log(item)
+				if (item instanceof Seed) {
+					component.animStart = 1
+					e.dropItem()
+					item.done = true
+				}
+
+				return true
+			}
+
 			this.done = true
 			let items = []
 
@@ -45,14 +97,16 @@ export default class Plant extends Entity {
 				items.push(new Stick())
 			}
 
-			if (Math.random() < 0.5) {
+			if (Math.random() < 0.7) {
 				items.push(new Seed())
 			}
 
+			let start = Math.random() * Math.PI * 2
+
 			for (let i = 0; i < items.length; i++) {
-				let a = i / items.length * Math.PI * 2;
+				let a = i / items.length * Math.PI * 2 + start
 				let item = items[i]
-				let d = 16
+				let d = Math.random() * 8 + 8
 
 				item.x = this.x + this.width / 2 + Math.cos(a) * d
 				item.y = this.y + this.height / 2 + Math.sin(a) * d
@@ -76,6 +130,6 @@ export default class Plant extends Entity {
 	}
 
 	water() {
-
+		this.wated = true
 	}
 }

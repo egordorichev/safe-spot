@@ -1,3 +1,4 @@
+import Plant from './Plant'
 import Tool from './Tool'
 
 export default class Shovel extends Tool {
@@ -36,7 +37,16 @@ export default class Shovel extends Tool {
 			if (tile == 7) {
 				this.area.map.setTile(x, y, 8)
 			} else {
-				this.area.map.setTile(x, y, tile == 0 ? (~~(Math.random() * 7) + 1) : 0)
+				if (tile != 0) {
+					let plant = new Plant()
+					plant.x = x * 16
+					plant.y = y * 16
+					plant.getComponent('AnimationComponent').layer = 5
+
+					this.area.add(plant)
+				} else {
+					this.area.map.setTile(x, y, ~~(Math.random() * 7) + 1)
+				}
 			}
 		}, 2000)
 	}
