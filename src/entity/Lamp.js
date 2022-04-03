@@ -5,7 +5,7 @@ export default class Lamp extends Item {
 	addComponents() {
 		super.addComponents()
 
-		this.tags = ["light"]
+		this.tags = ["light", "item"]
 		this.lightRadius = 1
 		this.lr = 1
 		this.time = 0

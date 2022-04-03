@@ -30,6 +30,8 @@ export default class App extends React.Component {
 		this.area.add(this.player = new Player())
 		this.area.add(this.camera = new Camera(this.player))
 
+		this.area.player = this.player
+
 		let lamp = new Lamp()
 		lamp.y = 24
 		this.area.add(lamp)
@@ -81,7 +83,7 @@ export default class App extends React.Component {
 
 		let raven = new Raven()
 		raven.x = 32
-		raven.y = 32
+		raven.y = -32
 		this.area.add(raven)
 	}
 

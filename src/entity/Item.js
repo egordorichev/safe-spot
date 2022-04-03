@@ -15,6 +15,7 @@ export default class Item extends Entity {
 		this.width = 8
 		this.height = 8
 		this.wasDown = false
+		this.tags = ["item"]
 	}
 
 	interact(e) {
