@@ -14,10 +14,11 @@ export default class Player extends Entity {
 		this.steps = []
 
 		for (let i = 1; i < 16; i++) {
-			console.log(this.steps[i] = new Howl({ src: [`sfx/steps/${i}.mp3`], volume: 0.2 }))
+			this.steps[i] = new Howl({ src: [`sfx/steps/${i}.mp3`], volume: 0.2 })
 		}
 
-		console.log(this.steps)
+		this.on = new Howl({ src: [`sfx/on.wav`] })
+		this.off = new Howl({ src: [`sfx/off.wav`] })
 	}
 	
 	addComponents() {
@@ -42,6 +43,9 @@ export default class Player extends Entity {
 				return
 			}
 
+			this.on.play()
+			console.log('on')
+		
 			item.owner = this
 
 			this.getComponent('InteractorComponent').collidingWith = null
@@ -59,6 +63,9 @@ export default class Player extends Entity {
 		if (this.item == null) {
 			return false
 		}
+
+		this.off.play()
+		console.log('off')
 
 		this.item.owner = null
 		this.item.drawOrder = 0

@@ -15,6 +15,7 @@ export default class WateringCan extends Tool {
 
 		this.full = false
 		this.sfx = new Howl({ src: ['sfx/can filling.wav'] })
+		this.sfx2 = new Howl({ src: ['sfx/can pouring.wav'] })
 	}
 
 	fill() {
@@ -28,7 +29,7 @@ export default class WateringCan extends Tool {
 	empty() {
 		let component = this.getComponent('AnimationComponent')
 		component.animStart = 0
-		this.sfx.play()
+		this.sfx2.play()
 		
 		this.full = false
 	}

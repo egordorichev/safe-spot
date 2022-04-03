@@ -4,6 +4,7 @@ import Entity from './Entity'
 import Player from './Player'
 import Stick from './Stick'
 import Seed from './Seed'
+import { Howl } from 'howler'
 
 export default class Plant extends Entity {
 	addComponents() {
@@ -14,6 +15,7 @@ export default class Plant extends Entity {
 		this.watered = false
 
 		this.addComponent(new InteractableComponent(this.interact.bind(this)))
+		this.sfx = new Howl({ src: ['sfx/fruit tear.wav'] })
 	}
 
 	update(p5, dt) {
@@ -99,6 +101,8 @@ export default class Plant extends Entity {
 
 			this.done = true
 			let items = []
+
+			this.sfx.play()
 
 			for (let i = 0; i <= ~~(Math.random() * 2); i++) {
 				items.push(new Stick())

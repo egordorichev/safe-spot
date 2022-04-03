@@ -1,5 +1,7 @@
 import Item from './Item'
 import Seed from './Seed'
+import { Howl } from 'howler'
+
 let used = false
 
 export default class Lamp extends Item {
@@ -15,6 +17,7 @@ export default class Lamp extends Item {
 		component.layer = 6
 		component.animLength = 10
 		component.animSpeed = 5
+		this.sfx = new Howl({ src: [`sfx/wood to fire.wav`] })
 	}
 
 	interact(e) {
@@ -32,6 +35,7 @@ export default class Lamp extends Item {
 
 				component.sx = 3
 				component.sy = 0
+				this.sfx.play()
 			}
 
 			return true

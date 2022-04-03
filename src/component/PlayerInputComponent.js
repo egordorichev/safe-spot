@@ -10,29 +10,43 @@ export default class PlayerInputComponent extends Component {
 		this.sfxTimer = 0
 	}
 
+	static controllerPressed(b) {
+		var gamepads = navigator.getGamepads()
+		let controller = gamepads[0]
+
+		return controller == null ? null : controller.buttons[b].pressed
+	}
+
+	static controllerAxis(b) {
+		var gamepads = navigator.getGamepads()
+		let controller = gamepads[0]
+
+		return controller == null ? 0 : controller.axes[b]
+	}
+
 	update(p5, dt) {
-		let vx = 0
-		let vy = 0
+		let vx = PlayerInputComponent.controllerAxis(0)
+		let vy = PlayerInputComponent.controllerAxis(1)
 		let component = this.entity.getComponent('PlayerGraphicsComponent')
 
-		if (p5.keyIsDown(p5.LEFT_ARROW) || p5.keyIsDown(65)) {
+		if (p5.keyIsDown(p5.LEFT_ARROW) || p5.keyIsDown(65) || PlayerInputComponent.controllerPressed(14)) {
 			vx = -1
 			component.flipped = true
 			component.layer = 0
 		}
 
-		if (p5.keyIsDown(p5.UP_ARROW) || p5.keyIsDown(87)) {
+		if (p5.keyIsDown(p5.UP_ARROW) || p5.keyIsDown(87) || PlayerInputComponent.controllerPressed(12)) {
 			vy = -1
 			component.layer = 2
 		}
 
-		if (p5.keyIsDown(p5.RIGHT_ARROW) || p5.keyIsDown(68)) {
+		if (p5.keyIsDown(p5.RIGHT_ARROW) || p5.keyIsDown(68) || PlayerInputComponent.controllerPressed(15)) {
 			vx += 1
 			component.flipped = false
 			component.layer = 0
 		}
 
-		if (p5.keyIsDown(p5.DOWN_ARROW) || p5.keyIsDown(83)) {
+		if (p5.keyIsDown(p5.DOWN_ARROW) || p5.keyIsDown(83) || PlayerInputComponent.controllerPressed(13)) {
 			vy += 1
 			component.layer = 1
 		}
@@ -74,14 +88,14 @@ export default class PlayerInputComponent extends Component {
 
 		this.wasPressed = wasPressed
 
-		wasPressed = p5.keyIsDown(32)
+		wasPressed = p5.keyIsDown(32) || PlayerInputComponent.controllerPressed(1)
 
 		if (this.wasUsePressed && !wasPressed) {
 			component.sx = 2
 			component.sy = 0
 
 			if (this.entity.item != null) {
-				this.entity.item.use()
+				this.entity?.item?.use()
 			}
 		}
 

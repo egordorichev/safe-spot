@@ -11,6 +11,7 @@ import WateringCan from './entity/WateringCan'
 import Map from './entity/Map'
 import Raven from './entity/Raven'
 import Chat from './entity/Chat'
+import PlayerInputComponent from './component/PlayerInputComponent'
 
 import { Howl } from 'howler'
 
@@ -99,10 +100,34 @@ export default class App extends React.Component {
 		}
 
 		this.resetRavenTimer()
+		this.controllers = []
+		let self = this
+
+		window.addEventListener("gamepadconnected", function(e) {
+			self.gamepadHandler(e, true);
+			console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
+				e.gamepad.index, e.gamepad.id,
+				e.gamepad.buttons.length, e.gamepad.axes.length);      
+		});
+		window.addEventListener("gamepaddisconnected", function(e) {
+			console.log("Gamepad disconnected from index %d: %s",
+				e.gamepad.index, e.gamepad.id);      
+				self.gamepadHandler(e, false);
+		});   
+	}
+
+	gamepadHandler(event, connecting) {
+		let gamepad = event.gamepad
+		if (connecting) {
+			this.controllers[gamepad.index] = gamepad
+			this.player.getComponent('PlayerInputComponent').controller = gamepad
+		} else {
+			delete this.controllers[gamepad.index]
+		}
 	}
 
 	resetRavenTimer() {
-		this.ravenTimer = Math.random() * 32 + 32
+		this.ravenTimer = Math.random() * 64 + 64
 	}
 
 	preload(p5) {
@@ -148,10 +173,18 @@ export default class App extends React.Component {
 			}
 
 			if (this.nextMusic == this.commonMusic) {
+				let delay = (Math.random() * 32 + 10) * 1000
+				console.log('delay', delay)
+
 				setTimeout(() => {
+					if (this.gameOver || this.menu) {
+						return
+					}
+
+					this.nextMusic = Math.random() < 0.5 ? this.nextMusic : this.bassDrumMusic
 					this.nextMusic.play()
 					this.nextMusic = null
-				}, Math.random() * 10 * 1000)
+				}, delay)
 			} else {
 				this.nextMusic.play()
 				this.nextMusic = null
@@ -161,13 +194,25 @@ export default class App extends React.Component {
 		}})
 
 		this.bassDrumMusic = new Howl({ src: ['bass_drum.wav'], onend: () => {
-			this.commonMusic.play()
-			this.currentMusic = this.commonMusic
+			setTimeout(() => {
+				if (this.gameOver || this.menu) {
+					return
+				}
+				
+				this.commonMusic.play()
+				this.currentMusic = this.commonMusic
+			}, 5000)
 		}})
 
 		this.bassMusic = new Howl({ src: ['bass.wav'], onend: () => {
-			this.bassDrumMusic.play()
-			this.currentMusic = this.bassDrumMusic
+			setTimeout(() => {
+				if (this.gameOver || this.menu) {
+					return
+				}
+
+				this.bassDrumMusic.play()
+				this.currentMusic = this.bassDrumMusic
+			}, 5000)
 		}})
 
 		this.beginningMusic = new Howl({ src: ['beginning.wav'], onend: () => {
@@ -176,6 +221,22 @@ export default class App extends React.Component {
 				this.currentMusic = this.bassMusic
 			}, 5000)
 		}})
+
+		this.spookLevel = 0
+		this.spookySounds = []
+		this.resetSpookyTimer()
+		
+		for (let i = 1; i < 10; i++) {
+			if (i == 3) {
+				continue
+			}
+
+			this.spookySounds.push(new Howl({ src: [`sfx/SF${i}.wav`], loop: true }))
+		}
+	}
+
+	resetSpookyTimer() {
+		this.spookyTimer = Math.random() * 32 + 32
 	}
 
 	destroy() {
@@ -239,17 +300,17 @@ export default class App extends React.Component {
 		this.gameCanvas.fill(255, 0, 0)
 		this.gameCanvas.textSize(128)
 		this.gameCanvas.textFont(this.font)
-		this.gameCanvas.text('SAFE SPOT', p5.windowWidth / 2, p5.windowHeight / 2)
+		this.gameCanvas.text('SAFE SPOT', p5.windowWidth / 2 + Math.random() * 4 - 2, p5.windowHeight / 2 + Math.random() * 4 - 2)
 		this.gameCanvas.fill(255)
 		this.gameCanvas.textSize(32)
 		this.gameCanvas.text('Press X to start', p5.windowWidth / 2, p5.windowHeight / 2 + 64)
 
-		if (p5.keyIsDown(88)) {
+		if (p5.keyIsDown(88) || p5.keyIsDown(32) || PlayerInputComponent.controllerPressed(2) || PlayerInputComponent.controllerPressed(0)) {
 			this.menu = false
 			this.gameOver = false
 
-			this.menuMusic.stop();
-			this.beginningMusic.play();
+			this.menuMusic?.stop();
+			// this.beginningMusic.play();
 			this.currentMusic = this.beginningMusic
 		}
 	}
@@ -272,7 +333,7 @@ export default class App extends React.Component {
 		this.gameCanvas.textSize(32)
 		this.gameCanvas.text('Press F to continue', p5.windowWidth / 2, p5.windowHeight / 2 + 64)
 
-		if (p5.keyIsDown(70)) {
+		if (p5.keyIsDown(70) || PlayerInputComponent.controllerPressed(0) || PlayerInputComponent.controllerPressed(2)) {
 			this.menu = true
 			this.gameOver = false
 
@@ -282,7 +343,7 @@ export default class App extends React.Component {
 
 	drawGame(p5) {
 		p5.shader(this.shader)
-		this.shader.setUniform('enabled', 1)
+		this.shader.setUniform('enabled', this.time > 10 && (this.time < 15 || this.time > 20))
 
 		this.time += p5.deltaTime * 0.01
 		this.ravenTimer -= p5.deltaTime * 0.001
@@ -294,15 +355,29 @@ export default class App extends React.Component {
 			let d = 400
 
 			let raven = new Raven(() => {
-				this.nextMusic = this.dangerMusic
+				// this.nextMusic = this.dangerMusic
 			})
+
 			raven.x = this.player.x + Math.cos(a) * d
 			raven.y = this.player.y + Math.sin(a) * d
 			this.area.add(raven)
 
-			this.currentMusic.stop()
+			/*this.currentMusic?.stop()
 			this.ravenMusic.play()
-			this.currentMusic = this.ravenMusic
+			this.currentMusic = this.ravenMusic*/
+		}
+
+		this.spookyTimer -= p5.deltaTime * 0.003
+
+		if (this.spookyTimer <= 0) {
+			console.log('spook')
+			this.resetSpookyTimer()
+			this.spookySounds[~~(Math.random() * 8)].play()
+
+			if (Math.random() < 0.5) {
+				this.spookLevel = Math.min(7, this.spookLevel + 1)
+				this.area.chat.print(`wife_${this.spookLevel}`)
+			}
 		}
 
 		this.area.update(p5, p5.deltaTime)

@@ -5,6 +5,7 @@ import Player from './Player'
 import Stick from './Stick'
 import Lamp from './Lamp'
 import Seed from './Seed'
+import { Howl } from 'howler'
 
 export default class Campfire extends Entity {
 	addComponents() {
@@ -19,6 +20,7 @@ export default class Campfire extends Entity {
 		this.time = 0
 		this.isLit = false
 		this.lr = 1
+		this.sfx = new Howl({ src: [`sfx/wood to fire.wav`] })
 	}
 
 	light() {
@@ -52,6 +54,7 @@ export default class Campfire extends Entity {
 				if (this.isLit) { 
 					e.dropItem()
 					item.done = true
+					this.sfx.play()
 
 					this.time -= 1
 					this.lr = 1
@@ -61,6 +64,7 @@ export default class Campfire extends Entity {
 				} else if (component.animStart < 3) {
 					component.animStart++
 
+					this.sfx.play()
 					e.dropItem()
 					item.done = true
 
@@ -72,6 +76,7 @@ export default class Campfire extends Entity {
 
 				if (this.isLit) { 
 					e.dropItem()
+					this.sfx.play()
 					item.done = true
 
 					this.time -= 1.5
@@ -84,6 +89,7 @@ export default class Campfire extends Entity {
 
 					e.dropItem()
 					item.done = true
+					this.sfx.play()
 
 					component.sx = 3
 					component.sy = 0

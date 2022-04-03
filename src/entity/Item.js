@@ -2,6 +2,7 @@ import AnimationComponent from '../component/AnimationComponent'
 import InteractableComponent from '../component/InteractableComponent'
 import Entity from './Entity'
 import Player from './Player'
+import PlayerInputComponent from '../component/PlayerInputComponent'
 
 export default class Item extends Entity {
 	addComponents() {
@@ -48,14 +49,17 @@ export default class Item extends Entity {
 				component.flipped = this.owner.graphicsComponent.flipped
 			}
 
-			let down = (p5.keyIsDown(69) || p5.keyIsDown(70))
+			let down = (p5.keyIsDown(69) || p5.keyIsDown(70) || PlayerInputComponent.controllerPressed(0))
 
 			if (component.time > 0.3 && down && !this.wasDown) {
 				setTimeout(() => {
 					if (this.owner && this.owner.graphicsComponent.time > 0.3) {
 						component.time = 0
 						this.getComponent('InteractableComponent').time = 0
-						this.owner?.dropItem()
+
+						if (this.owner?.dropItem) {
+							this.owner?.dropItem()
+						}
 					}
 				}, 0)
 			}

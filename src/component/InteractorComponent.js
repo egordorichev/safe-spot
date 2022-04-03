@@ -1,4 +1,5 @@
 import Component from './Component'
+import PlayerInputComponent from './PlayerInputComponent'
 
 export default class InteractorComponent extends Component {
 	constructor() {
@@ -10,7 +11,7 @@ export default class InteractorComponent extends Component {
 	}
 
 	update(p5, dt) {
-		let down = p5.keyIsDown(69) || p5.keyIsDown(70)
+		let down = p5.keyIsDown(69) || p5.keyIsDown(70) || PlayerInputComponent.controllerPressed(0)
 
 		if (this.collidingWith != null && down && !this.wasDown && !this.entity.done) {
 			let component = this.collidingWith.getComponent('InteractableComponent')
