@@ -8,6 +8,7 @@ export default class InteractableComponent extends Component {
 		this.id = 'InteractableComponent'
 		this.colliding = null
 		this.wasDown = false
+		this.time = 0
 	}
 
 	init(p5) {
@@ -16,21 +17,7 @@ export default class InteractableComponent extends Component {
 	}
 
 	update(p5, dt) {
-		let down = p5.keyIsDown(69) || p5.keyIsDown(32) || p5.keyIsDown(70)
-
-		if (this.colliding != null && down && !this.wasDown && !this.entity.done) {
-			let component = this.colliding.getComponent('InteractorComponent')
-			
-			if (this.entity.owner != null || component.collidingWith == this.entity) {
-				setTimeout(() => {
-					if (!this.callback(this.colliding)) {
-						component.callback(this.entity)
-					}
-				}, 1)
-			}
-		}
-
-		this.wasDown = down
+		this.time += dt
 	}
 
 	handleEvent(e, data) {

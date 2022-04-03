@@ -14,10 +14,11 @@ export default class Item extends Entity {
 
 		this.width = 8
 		this.height = 8
+		this.wasDown = false
 	}
 
 	interact(e) {
-		if (e instanceof Player && this.owner == null) {
+		if (e instanceof Player) {
 			return this.handlePickupInteraction(e)
 		}
 	}
@@ -28,12 +29,14 @@ export default class Item extends Entity {
 
 		component.sx = 3
 		component.sy = 0
+		component.time = 0
 
 		return true
 	}
 
 	update(p5, dt) {
 		super.update(p5, dt)
+		let component = this.getComponent('AnimationComponent')
 
 		if (this.owner != null) {
 			if (this.done) {
@@ -42,10 +45,23 @@ export default class Item extends Entity {
 				this.x = this.owner.x + 4
 				this.y = this.owner.y - 3
 			}
+
+			let down = (p5.keyIsDown(69) || p5.keyIsDown(32) || p5.keyIsDown(70))
+
+			if (component.time > 0.3 && down && !this.wasDown) {
+				setTimeout(() => {
+					if (this.owner && this.owner.graphicsComponent.time > 0.3) {
+						component.time = 0
+						this.getComponent('InteractableComponent').time = 0
+						this.owner?.dropItem()
+					}
+				}, 0)
+			}
+
+			this.wasDown = down
 		}
 
 		let s = dt * 0.01
-		let component = this.getComponent('AnimationComponent')
 
 		component.sx += (1 - component.sx) * s
 		component.sy += (1 - component.sy) * s

@@ -15,15 +15,8 @@ export default class Player extends Entity {
 		this.addComponent(new PlayerGraphicsComponent())
 		this.addComponent(new PlayerInputComponent())
 		this.addComponent(new CollisionCheckerComponent())
-		this.addComponent(new InteractorComponent(this.interact.bind(this)))
+		this.addComponent(new InteractorComponent())
 	}	
-
-	interact(e) {
-		if (e instanceof Item) {
-			// Hackz
-			setTimeout(() => this.pickup(e), 0)
-		}
-	}
 
 	update(p5, dt) {
 		super.update(p5, dt)

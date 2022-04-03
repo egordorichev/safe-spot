@@ -11,6 +11,7 @@ export default class Campfire extends Entity {
 		this.addComponent(animation)
 
 		animation.animSpeed = 5
+		animation.animStart = 2
 
 		this.addComponent(new InteractableComponent(this.interact.bind(this)))
 
@@ -19,7 +20,9 @@ export default class Campfire extends Entity {
 	}
 
 	light() {
-		if (this.isLit) {
+		let animation = this.getComponent('AnimationComponent')
+
+		if (this.isLit || animation.animStart < 3) {
 			return
 		}
 
@@ -27,10 +30,9 @@ export default class Campfire extends Entity {
 		this.isLit = true
 		this.lightRadius = 1
 
-		let animation = this.getComponent('AnimationComponent')
-
 		animation.layer = 1
 		animation.animLength = 13
+		animation.animStart = 0
 	}
 
 	interact(e) {
@@ -42,13 +44,21 @@ export default class Campfire extends Entity {
 			}
 
 			if (item instanceof Stick) {
+				let component = this.getComponent('AnimationComponent')
+
 				if (this.isLit) { 
 					e.dropItem()
 					item.done = true
 
 					this.time -= 1
 
-					let component = this.getComponent('AnimationComponent')
+					component.sx = 3
+					component.sy = 0
+				} else if (component.animStart < 3) {
+					component.animStart++
+
+					e.dropItem()
+					item.done = true
 
 					component.sx = 3
 					component.sy = 0

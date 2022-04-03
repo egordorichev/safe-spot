@@ -12,20 +12,18 @@ export default class Stick extends Item {
 
 	interact(e) {
 		if (e instanceof Player) {
-			setTimeout(() => {
-				let item = e.item
+			let item = e.item
 
-				if (item != this && item instanceof Stick) {
-					this.done = true
-					item.done = true
-					e.item = null
+			if (item != this && item instanceof Stick) {
+				this.done = true
+				item.done = true
+				e.item = null
 
-					let campfire = new Campfire()
-					campfire.x = this.x
-					campfire.y = this.y
-					this.area.add(campfire)
-				}
-			}, 0)
+				let campfire = new Campfire()
+				campfire.x = this.x
+				campfire.y = this.y
+				this.area.add(campfire)
+			}
 
 			return this.handlePickupInteraction(e)
 		}
