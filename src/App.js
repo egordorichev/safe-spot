@@ -8,6 +8,8 @@ import Player from './entity/Player'
 import Tile from './entity/Tile'
 import Campfire from './entity/Campfire'
 import Lamp from './entity/Lamp'
+import Plant from './entity/Plant'
+import Map from './entity/Map'
 
 export default class App extends React.Component {
 	setup(p5, ref) {
@@ -31,6 +33,9 @@ export default class App extends React.Component {
 		lamp.y = 32
 		this.area.add(lamp)
 
+		let map = new Map()
+		this.area.add(map)
+
 		for (let x = -8; x < 8; x++) {
 			for (let y = -8; y < 8; y++) {
 				let d = Math.sqrt(x * x + y * y)
@@ -39,17 +44,21 @@ export default class App extends React.Component {
 					continue
 				}
 
-				var item = new Tile()
-				
-				item.x = x * 16
-				item.y = y * 16
-
-				this.area.add(item)
+				map.setTile(x, y, ~~(Math.random() * 6) + 1)
 			}
 		}
 
 		for (let i = 0; i < 8; i++) {
 			let item = new Stick()
+
+			item.x = Math.random() * 128 - 64
+			item.y = Math.random() * 128 - 64
+			
+			this.area.add(item)
+		}
+
+		for (let i = 0; i < 8; i++) {
+			let item = new Plant()
 
 			item.x = Math.random() * 128 - 64
 			item.y = Math.random() * 128 - 64

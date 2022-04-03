@@ -11,6 +11,8 @@ export default class Lamp extends Item {
 
 		let component = this.getComponent('AnimationComponent')
 		component.layer = 6
+		component.animLength = 10
+		component.animSpeed = 5
 	}
 
 	update(p5, dt) {

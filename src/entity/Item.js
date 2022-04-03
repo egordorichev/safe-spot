@@ -67,9 +67,9 @@ export default class Item extends Entity {
 		component.sy += (1 - component.sy) * s
 
 		if (this.owner == null) {
-			component.oy = 0
-		} else {
 			component.oy = Math.cos(component.time * 0.9) * 2
+		} else {
+			component.oy = 0
 		}
 
 		component.angle = Math.sin(component.time) * 0.1
