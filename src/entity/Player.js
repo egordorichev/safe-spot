@@ -3,7 +3,7 @@ import PlayerGraphicsComponent from '../component/PlayerGraphicsComponent'
 import PlayerInputComponent from '../component/PlayerInputComponent'
 import CollisionCheckerComponent from '../component/CollisionCheckerComponent'
 import InteractorComponent from '../component/InteractorComponent'
-import Item from './Item'
+import Tool from './Tool'
 
 export default class Player extends Entity {
 	init(p5) {
@@ -77,5 +77,23 @@ export default class Player extends Entity {
 		this.item = null
 
 		return true
+	}
+
+	render(p5, canvas) {
+		if (this.item instanceof Tool) {
+			canvas.resetMatrix()
+			this.area.camera.apply(p5, canvas)
+
+			let x = Math.floor((this.x + 8) / 16) * 16
+			let y = Math.floor((this.y) / 16) * 16
+			let d = 3 + Math.sin(this.graphicsComponent.time * 2)
+
+			canvas.strokeWeight(1)
+			canvas.noFill()
+			canvas.stroke(255, 255, 255, 100)
+			canvas.rect(x + d, y + d, 16 - d * 2, 16 - d * 2)
+		}
+
+		super.render(p5, canvas)
 	}
 }

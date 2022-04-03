@@ -1,6 +1,6 @@
-import Item from './Item'
+import Tool from './Tool'
 
-export default class Shovel extends Item {
+export default class Shovel extends Tool {
 	addComponents() {
 		super.addComponents()
 
@@ -29,8 +29,8 @@ export default class Shovel extends Item {
 
 			this.beingUsed = false
 
-			let x = ~~((this.owner.x + 4) / 16)
-			let y = ~~((this.owner.y) / 16)
+			let x = Math.floor((this.x + 8) / 16)
+			let y = Math.floor((this.y) / 16)
 			let tile = this.area.map.getTile(x, y)
 
 			if (tile == 7) {

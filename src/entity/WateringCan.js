@@ -1,6 +1,6 @@
-import Item from './Item'
+import Tool from './Tool'
 
-export default class WateringCan extends Item {
+export default class WateringCan extends Tool {
 	addComponents() {
 		super.addComponents()
 
