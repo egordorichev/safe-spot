@@ -81,10 +81,11 @@ export default class App extends React.Component {
 			this.area.add(item)
 		}
 
-		let raven = new Raven()
-		raven.x = 32
-		raven.y = -32
-		this.area.add(raven)
+		this.resetRavenTimer()
+	}
+
+	resetRavenTimer() {
+		this.ravenTimer = Math.random() * 32 + 32
 	}
 
 	preload(p5) {
@@ -198,6 +199,20 @@ export default class App extends React.Component {
 		this.shader.setUniform('enabled', 1)
 
 		this.time += p5.deltaTime * 0.01
+		this.ravenTimer -= p5.deltaTime * 0.003
+
+		if (this.ravenTimer <= 0) {
+			this.resetRavenTimer()
+			console.log('spawn raven')
+			let a = Math.random() * Math.PI * 2
+			let d = 400
+
+			let raven = new Raven()
+			raven.x = this.player.x + Math.cos(a) * d
+			raven.y = this.player.y + Math.sin(a) * d
+			this.area.add(raven)
+		}
+
 		this.area.update(p5, p5.deltaTime)
 
 		this.gameCanvas.background(0)

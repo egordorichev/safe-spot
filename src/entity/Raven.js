@@ -83,7 +83,7 @@ export default class Raven extends Entity {
 
 		s = d * 0.001
 
-		let m = 10
+		let m = 20
 		this.vx = Math.min(m, Math.max(-m, this.vx))
 		this.vy = Math.min(m, Math.max(-m, this.vy))
 
