@@ -12,6 +12,7 @@ import Map from './entity/Map'
 import Raven from './entity/Raven'
 import Memory from './entity/Memory'
 import Chat from './entity/Chat'
+import Firefly from './entity/Firefly'
 import PlayerInputComponent from './component/PlayerInputComponent'
 
 import { Howl } from 'howler'
@@ -63,6 +64,13 @@ export default class App extends React.Component {
 		let memory = new Memory("memory_zakolka")
 		memory.x = -24
 		this.area.add(memory)
+
+		for (let i = 0; i < 32; i++) {
+			let firefly = new Firefly()
+			firefly.x = Math.random() * 512 - 256
+			firefly.y = Math.random() * 512 - 256
+			this.area.add(firefly)
+		}
 
 		let wateringCan = new WateringCan()
 		wateringCan.x = 16
@@ -352,7 +360,6 @@ export default class App extends React.Component {
 		this.shader.setUniform('enabled', (!this.area.glitchFlash || Math.cos(this.time * 0.1) > -0.99) && this.time > 10 && (this.time < 15 || this.time > 20))
 
 		this.time += p5.deltaTime * 0.01
-		console.log(this.time)
 
 		if (this.time > 5000) {
 			this.area.glitchRotate = true
