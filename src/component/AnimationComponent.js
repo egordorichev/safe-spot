@@ -48,7 +48,8 @@ export default class AnimationComponent extends GraphicsComponent {
 			canvas.strokeWeight(1)
 			canvas.stroke(255)
 			canvas.noFill()
-			canvas.rect(-this.entity.width / 2 - 1, -this.entity.height - 1, this.entity.width + 2, this.entity.height + 2)
+			let d = Math.sin(this.time) + 2
+			canvas.rect(-this.entity.width / 2 - d, -this.entity.height - d, this.entity.width + d * 2, this.entity.height + d * 2)
 			canvas.translate(-ox, -oy - this.oy)
 
 			canvas.noStroke()

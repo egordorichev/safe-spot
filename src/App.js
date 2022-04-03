@@ -9,6 +9,7 @@ import Lamp from './entity/Lamp'
 import Plant from './entity/Plant'
 import WateringCan from './entity/WateringCan'
 import Map from './entity/Map'
+import Raven from './entity/Raven'
 
 export default class App extends React.Component {
 	setup(p5, ref) {
@@ -46,7 +47,7 @@ export default class App extends React.Component {
 		this.area.add(map)
 		this.area.map = map
 		this.gameOver = false
-		this.menu = true
+		this.menu = false
 
 		for (let x = -8; x < 8; x++) {
 			for (let y = -8; y < 8; y++) {
@@ -77,6 +78,11 @@ export default class App extends React.Component {
 			
 			this.area.add(item)
 		}
+
+		let raven = new Raven()
+		raven.x = 32
+		raven.y = 32
+		this.area.add(raven)
 	}
 
 	preload(p5) {
@@ -207,7 +213,7 @@ export default class App extends React.Component {
 
 		let d = 3200000
 
-		this.area.tagged.get("light").forEach(e => {
+		this.area.tagged.get('light').forEach(e => {
 			let dd = e.distanceTo(this.player)
 			d = Math.min(dd, d)
 		})
