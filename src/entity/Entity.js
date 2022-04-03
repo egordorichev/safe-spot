@@ -83,4 +83,20 @@ export default class Entity {
 
 		map.push(this)
 	}
+
+	removeTag(tag) {
+		this.tags.push(tag)
+
+		let map = this.area.tagged.get(tag)
+		
+		if (!map) {
+			return
+		}
+
+		let index = map.indexOf(this)
+
+		if (index != -1) {
+			map.splice(index, 1)
+		}
+	}
 }

@@ -17,6 +17,7 @@ export default class Campfire extends Entity {
 
 		this.time = 0
 		this.isLit = false
+		this.lr = 1
 	}
 
 	light() {
@@ -29,6 +30,7 @@ export default class Campfire extends Entity {
 		this.addTag("light")
 		this.isLit = true
 		this.lightRadius = 1
+		this.lr = 1
 
 		animation.layer = 1
 		animation.animLength = 13
@@ -83,19 +85,28 @@ export default class Campfire extends Entity {
 		component.sy += ((0.9 + Math.cos(this.time) * 0.1) - component.sy) * s
 		component.angle = Math.cos(this.time * 0.7) * 0.05 
 
-		this.lightRadius = Math.max(0, 1 - this.time * 0.01)
+		this.lr = Math.max(0, 1 - this.time * 0.005)
 
-		if (this.lightRadius < 0) {
-			this.done = true
+		if (this.isLit && this.lr <= 0) {
+			this.lr = 0
+			this.isLit = false
+
+			component.layer = 0
+			component.animStart = 0
+			component.animLength = 1
+
+			this.removeTag("light")
 		}
 
-		this.lightRadius += Math.cos(this.time) * 0.1
+		if (this.isLit) {
+			this.lightRadius = this.lr + Math.cos(this.time) * 0.01
+		}
 	}
 
 	render(p5, canvas) {
 		if (this.isLit) {
 			let component = this.getComponent('AnimationComponent')
-			let d = Math.sin(component.time * 0.1) * 5 + 20
+			let d = (Math.sin(component.time * 0.1) * 5 + 20) * this.lightRadius
 			component.position(p5, canvas, 0, 0)
 
 			canvas.translate(0, -4)

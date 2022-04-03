@@ -52,7 +52,12 @@ export default class Area {
 					map.splice(map.indexOf(e), 1)
 				})
 
-				this.collidable.splice(this.collidable.indexOf(e), 1)
+				let index = this.collidable.indexOf(e)
+
+				if (index != -1) {
+					this.collidable.splice(index, 1)
+				}
+
 				this.entities.splice(i, 1)
 			}
 		}
