@@ -49,15 +49,23 @@ export default class Plant extends Entity {
 				this.time = 0
 			}
 
-			if (this.time >= 10) {
-				component.animStart++
-				this.time = 0
+			if (component.animStart == 2) {
+				let d = 3200000
 
-				if (component.animStart == 3) {
-					component.animStart = 0
-					component.layer = ~~(Math.random() * 5)
-					this.time = Math.random() * 30
+				this.area.tagged.get("light").forEach(e => {
+					let dd = e.distanceTo(this)
+					d = Math.min(dd, d)
+				})
+
+				if (d > 64) {
+					this.time -= dt * 0.001
+				} else {
+					console.log('lit')
 				}
+			}
+
+			if (this.time >= 10) {
+				this.advanceGrowth()
 			}
 		} else if (this.time >= 100) {
 			this.done = true
@@ -80,7 +88,6 @@ export default class Plant extends Entity {
 
 				let item = e.item
 
-				console.log(item)
 				if (item instanceof Seed) {
 					component.animStart = 1
 					e.dropItem()
@@ -129,7 +136,21 @@ export default class Plant extends Entity {
 		p5.pop()
 	}
 
+	advanceGrowth() {
+		let component = this.getComponent('AnimationComponent')
+
+		component.animStart++
+		this.time = 0
+
+		if (component.animStart == 3) {
+			component.animStart = 0
+			component.layer = ~~(Math.random() * 5)
+			this.time = Math.random() * 30
+		}
+	}
+
 	water() {
 		this.wated = true
+		this.advanceGrowth()
 	}
 }
