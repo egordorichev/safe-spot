@@ -7,6 +7,7 @@ export default class PlayerInputComponent extends Component {
 		this.time = 0
 		this.wasPressed = false
 		this.wasUsePressed = false
+		this.sfxTimer = 0
 	}
 
 	update(p5, dt) {
@@ -93,5 +94,19 @@ export default class PlayerInputComponent extends Component {
 
 		component.sx += (1 - component.sx) * s
 		component.sy += (1 - component.sy) * s
+
+		if (d > 0) {
+			if (this.stepTimer == 0) {
+				this.entity.steps[~~(Math.random(16) + 1)].play()
+			}
+
+			this.stepTimer += dt * 0.004
+
+			if (this.stepTimer > 1) {
+				this.stepTimer = 0
+			}
+		} else {
+			this.stepTimer = 0
+		}
 	}
 }

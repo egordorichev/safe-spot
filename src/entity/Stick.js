@@ -1,6 +1,7 @@
 import Campfire from './Campfire'
 import Item from './Item'
 import Player from './Player'
+import { Howl } from 'howler'
 
 let used = false
 
@@ -10,6 +11,8 @@ export default class Stick extends Item {
 
 		let component = this.getComponent('AnimationComponent')
 		component.layer = 0
+
+		this.sfx = new Howl({ src: ['sfx/branch.wav'] })
 	}
 
 	interact(e) {
@@ -27,6 +30,7 @@ export default class Stick extends Item {
 				this.area.add(campfire)
 			}
 
+			this.sfx.play()
 			return this.handlePickupInteraction(e)
 		}
 	}

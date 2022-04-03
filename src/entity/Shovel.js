@@ -1,5 +1,7 @@
 import Plant from './Plant'
 import Tool from './Tool'
+import { Howl } from 'howler'
+
 let used = false
 
 export default class Shovel extends Tool {
@@ -11,11 +13,20 @@ export default class Shovel extends Tool {
 		component.animSpeed = 5
 
 		this.beingUsed = false
+
+		this.sfx1 = new Howl({ src: ['sfx/shovel.wav'] })
+		this.sfx2 = new Howl({ src: ['sfx/shovel2.wav'] })
 	}
 
 	use() {
 		if (this.beingUsed) {
 			return
+		}
+
+		if (Math.random() > 0.5) {
+			this.sfx1.play()
+		} else {
+			this.sfx2.play()
 		}
 
 		this.beingUsed = true

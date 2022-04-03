@@ -1,9 +1,15 @@
 import AnimationComponent from '../component/AnimationComponent'
 import Entity from './Entity'
+import { Howl } from 'howler'
 
 let saidAboutRavens = false
 
 export default class Raven extends Entity {
+	constructor(callback) {
+		super()
+		this.callback = callback
+	}
+
 	addComponents() {
 		let animation = new AnimationComponent('ravens.png')
 		this.addComponent(animation)
@@ -16,6 +22,8 @@ export default class Raven extends Entity {
 		this.vx = 0
 		this.vy = 0
 		this.revert = false
+
+		this.sfx = new Howl({ src: ['sfx/crow.wav'] })
 	}
 
 	init(p5) {
@@ -57,6 +65,7 @@ export default class Raven extends Entity {
 		if (d < 64 && !this.revert) {
 			if (this.target == this.area.player) {
 				this.findTarget()
+				this.sfx.play()
 				console.log('searching for target', this.target)
 				return
 			}
@@ -67,6 +76,8 @@ export default class Raven extends Entity {
 					this.area.chat.print("ravens")
 				}
 
+				this.sfx.play()
+				this.callback()
 				console.log('picked up')
 				this.target.owner = this
 				this.revert = true
@@ -79,6 +90,7 @@ export default class Raven extends Entity {
 			dy *= -1
 
 			if (d >= 300) {
+				this.sfx.play()
 				console.log('dropping')
 				this.done = true
 				this.item.owner = null

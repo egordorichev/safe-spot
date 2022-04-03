@@ -4,11 +4,20 @@ import PlayerInputComponent from '../component/PlayerInputComponent'
 import CollisionCheckerComponent from '../component/CollisionCheckerComponent'
 import InteractorComponent from '../component/InteractorComponent'
 import Tool from './Tool'
+import { Howl } from 'howler'
 
 export default class Player extends Entity {
 	init(p5) {
 		super.init(p5)
 		this.item = null
+
+		this.steps = []
+
+		for (let i = 1; i < 16; i++) {
+			console.log(this.steps[i] = new Howl({ src: [`sfx/steps/${i}.mp3`], volume: 0.2 }))
+		}
+
+		console.log(this.steps)
 	}
 	
 	addComponents() {

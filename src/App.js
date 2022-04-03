@@ -12,8 +12,23 @@ import Map from './entity/Map'
 import Raven from './entity/Raven'
 import Chat from './entity/Chat'
 
+import { Howl } from 'howler'
+
 export default class App extends React.Component {
+	unlockAudioContext(context) {
+		let menuMusic = this.menuMusic
+		let self = this
+    if (context.state !== "suspended") return;
+    const b = document.body;
+    const events = ["touchstart", "touchend", "mousedown", "keydown"];
+    events.forEach(e => b.addEventListener(e, unlock, false));
+    function unlock() {context.resume().then(clean); menuMusic.play(); self.currentMusic = menuMusic; console.log(self.currentMusic) }
+    function clean() {events.forEach(e => b.removeEventListener(e, unlock));}
+	}
+
 	setup(p5, ref) {
+		this.unlockAudioContext(new (window.AudioContext || window.webkitAudioContext)())
+
 		this.canvas = p5.createCanvas(p5.windowWidth, p5.windowHeight, p5.WEBGL)
 		this.canvas.parent(ref)
 		this.ref = ref
@@ -51,7 +66,7 @@ export default class App extends React.Component {
 		this.area.add(map)
 		this.area.map = map
 		this.gameOver = false
-		this.menu = false
+		this.menu = true
 
 		for (let x = -8; x < 8; x++) {
 			for (let y = -8; y < 8; y++) {
@@ -103,6 +118,64 @@ export default class App extends React.Component {
 
 		this.font = p5.loadFont('font.ttf')
 		this.fontBold = p5.loadFont('fontbold.ttf')
+	
+		this.menuMusic = new Howl({ src: ['menu.wav'], loop: true })
+		this.deathMusic = new Howl({ src: ['death.wav'], loop: false })
+
+		this.ravenMusic = new Howl({ src: ['ravens.wav'], onend: () => {
+			if (!this.nextMusic) {
+				this.nextMusic = this.commonMusic
+			}
+
+			this.nextMusic.play()
+			this.nextMusic = null
+			this.currentMusic = this.nextMusic
+		}})
+
+		this.dangerMusic = new Howl({ src: ['danger.wav'], onend: () => {
+			if (!this.nextMusic) {
+				this.nextMusic = this.commonMusic
+			}
+
+			this.nextMusic.play()
+			this.nextMusic = null
+			this.currentMusic = this.nextMusic
+		}})
+
+		this.commonMusic = new Howl({ src: ['common.wav'], onend: () => {
+			if (!this.nextMusic) {
+				this.nextMusic = this.commonMusic
+			}
+
+			if (this.nextMusic == this.commonMusic) {
+				setTimeout(() => {
+					this.nextMusic.play()
+					this.nextMusic = null
+				}, Math.random() * 10 * 1000)
+			} else {
+				this.nextMusic.play()
+				this.nextMusic = null
+			}
+
+			this.currentMusic = this.nextMusic
+		}})
+
+		this.bassDrumMusic = new Howl({ src: ['bass_drum.wav'], onend: () => {
+			this.commonMusic.play()
+			this.currentMusic = this.commonMusic
+		}})
+
+		this.bassMusic = new Howl({ src: ['bass.wav'], onend: () => {
+			this.bassDrumMusic.play()
+			this.currentMusic = this.bassDrumMusic
+		}})
+
+		this.beginningMusic = new Howl({ src: ['beginning.wav'], onend: () => {
+			setTimeout(() => {
+				this.bassMusic.play()
+				this.currentMusic = this.bassMusic
+			}, 5000)
+		}})
 	}
 
 	destroy() {
@@ -174,6 +247,10 @@ export default class App extends React.Component {
 		if (p5.keyIsDown(88)) {
 			this.menu = false
 			this.gameOver = false
+
+			this.menuMusic.stop();
+			this.beginningMusic.play();
+			this.currentMusic = this.beginningMusic
 		}
 	}
 
@@ -216,10 +293,16 @@ export default class App extends React.Component {
 			let a = Math.random() * Math.PI * 2
 			let d = 400
 
-			let raven = new Raven()
+			let raven = new Raven(() => {
+				this.nextMusic = this.dangerMusic
+			})
 			raven.x = this.player.x + Math.cos(a) * d
 			raven.y = this.player.y + Math.sin(a) * d
 			this.area.add(raven)
+
+			this.currentMusic.stop()
+			this.ravenMusic.play()
+			this.currentMusic = this.ravenMusic
 		}
 
 		this.area.update(p5, p5.deltaTime)
@@ -233,8 +316,7 @@ export default class App extends React.Component {
 		this.area.render(p5, this.gameCanvas)
 
 		if (this.area.tagged.get('light').length == 0) {
-			console.log('game over')
-			this.gameOver = true
+			this.fail()
 		}
 
 		let d = 3200000
@@ -245,9 +327,18 @@ export default class App extends React.Component {
 		})
 
 		if (d > 350) {
-			console.log('game over')
-			this.gameOver = true
+			this.fail()
 		}
+	}
+
+	fail() {
+		console.log('game over')
+		this.gameOver = true
+
+		console.log(this.currentMusic)
+		this.currentMusic?.stop()
+		this.currentMusic = this.deathMusic
+		this.deathMusic.play()
 	}
 
 	windowResized(p5) {

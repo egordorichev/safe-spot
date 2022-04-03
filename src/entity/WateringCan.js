@@ -1,6 +1,8 @@
 import Tool from './Tool'
 import Campfire from './Campfire'
 import Plant from './Plant'
+import { Howl } from 'howler'
+
 let used = false
 
 export default class WateringCan extends Tool {
@@ -12,11 +14,13 @@ export default class WateringCan extends Tool {
 		component.animSpeed = 5
 
 		this.full = false
+		this.sfx = new Howl({ src: ['sfx/can filling.wav'] })
 	}
 
 	fill() {
 		let component = this.getComponent('AnimationComponent')
 		component.animStart = 1
+		this.sfx.play()
 
 		this.full = true
 	}
@@ -24,6 +28,7 @@ export default class WateringCan extends Tool {
 	empty() {
 		let component = this.getComponent('AnimationComponent')
 		component.animStart = 0
+		this.sfx.play()
 		
 		this.full = false
 	}

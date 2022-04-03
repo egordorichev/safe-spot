@@ -25,8 +25,8 @@ export default class Plant extends Entity {
 			let x = Math.floor((this.x + 8) / 16)
 			let y = Math.floor((this.y) / 16)
 
-			for (let ox = -2; ox <= 2; ox++) {
-				for (let oy = -2; oy <= 2; oy++) {
+			for (let ox = -1; ox <= 1; ox++) {
+				for (let oy = -1; oy <= 1; oy++) {
 					let d = Math.sqrt(ox * ox + oy * oy)
 
 					if (Math.random() < 0.8 / d && this.area.map.getTile(x + ox, y + oy) == 0) {
