@@ -10,6 +10,7 @@ import Plant from './entity/Plant'
 import WateringCan from './entity/WateringCan'
 import Map from './entity/Map'
 import Raven from './entity/Raven'
+import Chat from './entity/Chat'
 
 export default class App extends React.Component {
 	setup(p5, ref) {
@@ -29,6 +30,7 @@ export default class App extends React.Component {
 
 		this.area.add(this.player = new Player())
 		this.area.add(this.camera = new Camera(this.player))
+		this.area.add(this.area.chat = new Chat())
 
 		this.area.player = this.player
 
@@ -100,6 +102,7 @@ export default class App extends React.Component {
 		context.imageSmoothingEnabled = false;
 
 		this.font = p5.loadFont('font.ttf')
+		this.fontBold = p5.loadFont('fontbold.ttf')
 	}
 
 	destroy() {
@@ -145,6 +148,12 @@ export default class App extends React.Component {
 		}
 
 		p5.rect(0, 0, p5.width, p5.height)
+
+		const gl = this.canvas.elt.getContext('webgl')
+		gl.disable(gl.DEPTH_TEST)
+		
+		p5.textFont(this.fontBold)
+		this.area.chat.renderUi(p5, p5)
 	}
 
 	drawMenu(p5) {
