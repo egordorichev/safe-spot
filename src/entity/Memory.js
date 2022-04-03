@@ -19,6 +19,22 @@ export default class Memory extends Item {
 	handlePickupInteraction(e) {
 		this.done = true
 		this.area.chat.print(this.id)
-		this.area.memoriesCollected++
+
+		setTimeout(() => {
+			this.area.memoriesCollected++
+		}, 5000)
+
+		e.getComponent('PlayerInputComponent').disabled = true
+		let component = e.getComponent('PlayerGraphicsComponent')
+
+		component.layer = 3
+		component.animLength = 19
+
+		setTimeout(() => {
+			e.getComponent('PlayerInputComponent').disabled = false
+			component.layer = 0
+			component.animLength = 7
+			component.animLength = 1
+		}, 2000)
 	}
 }

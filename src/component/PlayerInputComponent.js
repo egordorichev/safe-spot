@@ -25,9 +25,18 @@ export default class PlayerInputComponent extends Component {
 	}
 
 	update(p5, dt) {
+		let component = this.entity.getComponent('PlayerGraphicsComponent')
+
+		if (this.disabled) {
+			let s = dt * 0.01
+
+			component.sx += (1 - component.sx) * s
+			component.sy += (1 - component.sy) * s
+			return
+		}
+
 		let vx = PlayerInputComponent.controllerAxis(0)
 		let vy = PlayerInputComponent.controllerAxis(1)
-		let component = this.entity.getComponent('PlayerGraphicsComponent')
 
 		if (p5.keyIsDown(p5.LEFT_ARROW) || p5.keyIsDown(65) || PlayerInputComponent.controllerPressed(14)) {
 			vx = -1

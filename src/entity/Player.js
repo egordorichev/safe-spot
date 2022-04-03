@@ -43,8 +43,9 @@ export default class Player extends Entity {
 				return
 			}
 
+			let component = this.getComponent('PlayerGraphicsComponent')
+
 			this.on.play()
-			console.log('on')
 
 			this.area.chat.print('pickup', item.constructor.name.toLowerCase() + "_name")
 		
@@ -53,8 +54,6 @@ export default class Player extends Entity {
 			this.getComponent('InteractorComponent').collidingWith = null
 			this.item = item
 			this.item.drawOrder = 1
-
-			let component = this.getComponent('PlayerGraphicsComponent')
 
 			component.sx = 2
 			component.sy = 0
@@ -67,7 +66,6 @@ export default class Player extends Entity {
 		}
 
 		this.off.play()
-		console.log('off')
 		this.area.chat.print('drop', this.item.constructor.name.toLowerCase() + "_name")
 
 		this.item.owner = null
