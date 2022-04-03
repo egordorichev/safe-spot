@@ -204,6 +204,18 @@ export default class App extends React.Component {
 			console.log('game over')
 			this.gameOver = true
 		}
+
+		let d = 3200000
+
+		this.area.tagged.get("light").forEach(e => {
+			let dd = e.distanceTo(this.player)
+			d = Math.min(dd, d)
+		})
+
+		if (d > 350) {
+			console.log('game over')
+			this.gameOver = true
+		}
 	}
 
 	windowResized(p5) {
