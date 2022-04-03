@@ -1,6 +1,8 @@
 import AnimationComponent from '../component/AnimationComponent'
 import Entity from './Entity'
 
+let saidAboutRavens = false
+
 export default class Raven extends Entity {
 	addComponents() {
 		let animation = new AnimationComponent('ravens.png')
@@ -60,6 +62,11 @@ export default class Raven extends Entity {
 			}
 
 			if (d <= 16) {
+				if (!saidAboutRavens) {
+					saidAboutRavens = true
+					this.area.chat.print("ravens")
+				}
+
 				console.log('picked up')
 				this.target.owner = this
 				this.revert = true

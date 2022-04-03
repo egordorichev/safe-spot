@@ -1,6 +1,7 @@
 import Tool from './Tool'
 import Campfire from './Campfire'
 import Plant from './Plant'
+let used = false
 
 export default class WateringCan extends Tool {
 	addComponents() {
@@ -50,6 +51,15 @@ export default class WateringCan extends Tool {
 				this.area.map.setTile(x, y, 0)
 				this.fill()
 			}
+		}
+	}
+
+	handlePickupInteraction(e) {
+		super.handlePickupInteraction(e)
+
+		if (!used) {
+			used = true
+			this.area.chat.print("watering_can")
 		}
 	}
 }

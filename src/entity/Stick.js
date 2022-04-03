@@ -2,6 +2,8 @@ import Campfire from './Campfire'
 import Item from './Item'
 import Player from './Player'
 
+let used = false
+
 export default class Stick extends Item {
 	addComponents() {
 		super.addComponents()
@@ -26,6 +28,17 @@ export default class Stick extends Item {
 			}
 
 			return this.handlePickupInteraction(e)
+		}
+	}
+
+
+
+	handlePickupInteraction(e) {
+		super.handlePickupInteraction(e)
+
+		if (!used) {
+			used = true
+			this.area.chat.print("stick")
 		}
 	}
 }

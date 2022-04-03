@@ -27,7 +27,9 @@ export default class Chat extends Entity {
 
 			p5.fill(255, 255, 255, line[1] * 255)
 
-			p5.text(line[0], -p5.windowWidth / 2 + 10, p5.windowHeight / 2 - 10 - (j++) * 24)
+			p5.text(line[0], -p5.windowWidth / 2 + 10, p5.windowHeight / 2 - 10 - j * 32)
+
+			j += line[0].split(/\r\n|\r|\n/).length
 
 			if (line[1] <= 0) {
 				this.lines.splice(i, 1)

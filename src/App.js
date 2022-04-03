@@ -208,7 +208,7 @@ export default class App extends React.Component {
 		this.shader.setUniform('enabled', 1)
 
 		this.time += p5.deltaTime * 0.01
-		this.ravenTimer -= p5.deltaTime * 0.003
+		this.ravenTimer -= p5.deltaTime * 0.001
 
 		if (this.ravenTimer <= 0) {
 			this.resetRavenTimer()

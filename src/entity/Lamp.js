@@ -1,5 +1,6 @@
 import Item from './Item'
 import Seed from './Seed'
+let used = false
 
 export default class Lamp extends Item {
 	addComponents() {
@@ -65,5 +66,14 @@ export default class Lamp extends Item {
 		canvas.circle(0, 0, d, d)
 
 		super.render(p5, canvas)
+	}
+
+	handlePickupInteraction(e) {
+		super.handlePickupInteraction(e)
+
+		if (!used) {
+			used = true
+			this.area.chat.print("lamp")
+		}
 	}
 }

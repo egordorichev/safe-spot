@@ -1,4 +1,5 @@
 import Item from './Item'
+let used = false
 
 export default class Seed extends Item {
 	addComponents() {
@@ -10,5 +11,14 @@ export default class Seed extends Item {
 	}
 
 	use() {
+	}
+
+	handlePickupInteraction(e) {
+		super.handlePickupInteraction(e)
+
+		if (!used) {
+			used = true
+			this.area.chat.print("seed")
+		}
 	}
 }

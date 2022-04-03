@@ -1,5 +1,6 @@
 import Plant from './Plant'
 import Tool from './Tool'
+let used = false
 
 export default class Shovel extends Tool {
 	addComponents() {
@@ -49,5 +50,14 @@ export default class Shovel extends Tool {
 				}
 			}
 		}, 2000)
+	}
+
+	handlePickupInteraction(e) {
+		super.handlePickupInteraction(e)
+
+		if (!used) {
+			used = true
+			this.area.chat.print("shovel")
+		}
 	}
 }
