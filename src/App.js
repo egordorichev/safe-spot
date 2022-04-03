@@ -47,6 +47,7 @@ export default class App extends React.Component {
 		this.area = new Area(p5)
 		this.time = 0
 		this.area.glitchBlack = false
+		this.area.memoriesCollected = 0
 
 		this.area.add(this.player = new Player())
 		this.area.add(this.camera = new Camera(this.player))
@@ -62,9 +63,22 @@ export default class App extends React.Component {
 		shovel.x = 24
 		this.area.add(shovel)
 
-		let memory = new Memory("memory_zakolka")
-		memory.x = -24
-		this.area.add(memory)
+		let memories = [
+			"memory_zakolka",
+			"memory_kulon",
+			"memory_guitar",
+			"memory_gamepad",
+			"memory_book",
+			"memory_badge",
+			"memory_miska"
+		]
+
+		for (let i = 0; i < memories.length; i++) {
+			let memory = new Memory(memories[i], i)
+			memory.x = Math.random() * 512 - 256
+			memory.y = Math.random() * 512 - 256
+			this.area.add(memory)
+		}
 
 		for (let i = 0; i < 32; i++) {
 			let firefly = new Firefly()
@@ -452,7 +466,7 @@ export default class App extends React.Component {
 
 		this.area.render(p5, this.gameCanvas)
 
-		if (this.area.tagged.get('light').length == 0) {
+		if (this.area.tagged.get('light').length == 0 || this.area.memoriesCollected >= 7) {
 			this.fail()
 		}
 
