@@ -15,6 +15,28 @@ export default class Plant extends Entity {
 		this.addComponent(new InteractableComponent(this.interact.bind(this)))
 	}
 
+	update(p5, dt) {
+		super.update(p5, dt)
+
+		if (this.graphicsComponent.time > 20) {
+			this.graphicsComponent.time = 0
+
+			let x = Math.floor((this.x + 8) / 16)
+			let y = Math.floor((this.y) / 16)
+			let tile = this.area.map.getTile(x, y)
+
+			for (let ox = -2; ox <= 2; ox++) {
+				for (let oy = -2; oy <= 2; oy++) {
+					let d = Math.sqrt(ox * ox + oy * oy)
+
+					if (Math.random() < 0.8 / d && this.area.map.getTile(x + ox, y + oy) == 0) {
+						this.area.map.setTile(x + ox, y + oy, ~~(Math.random() * 6) + 1)
+					}
+				}
+			}
+		}
+	}
+
 	interact(e) {
 		if (e instanceof Player) {
 			this.done = true
@@ -55,6 +77,6 @@ export default class Plant extends Entity {
 	}
 
 	water() {
-		
+
 	}
 }

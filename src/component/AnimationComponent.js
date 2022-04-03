@@ -54,7 +54,7 @@ export default class AnimationComponent extends GraphicsComponent {
 			canvas.noStroke()
 			canvas.fill(255)
 
-			canvas.text('e', -2, -12)
+			canvas.text('e', -2, -this.entity.height - 4)
 			canvas.textSize(8)
 		}
 
