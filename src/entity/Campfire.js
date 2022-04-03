@@ -3,20 +3,34 @@ import InteractableComponent from '../component/InteractableComponent'
 import Entity from './Entity'
 import Player from './Player'
 import Stick from './Stick'
+import Lamp from './Lamp'
 
 export default class Campfire extends Entity {
 	addComponents() {
 		let animation = new AnimationComponent('fire.png')
 		this.addComponent(animation)
 
-		animation.animLength = 13
 		animation.animSpeed = 5
 
 		this.addComponent(new InteractableComponent(this.interact.bind(this)))
 
 		this.time = 0
-		this.tags = ["light"]
+		this.isLit = false
+	}
+
+	light() {
+		if (this.isLit) {
+			return
+		}
+
+		this.addTag("light")
+		this.isLit = true
 		this.lightRadius = 1
+
+		let animation = this.getComponent('AnimationComponent')
+
+		animation.layer = 1
+		animation.animLength = 13
 	}
 
 	interact(e) {
@@ -28,15 +42,19 @@ export default class Campfire extends Entity {
 			}
 
 			if (item instanceof Stick) {
-				e.dropItem()
-				item.done = true
+				if (this.isLit) { 
+					e.dropItem()
+					item.done = true
 
-				this.time -= 1
+					this.time -= 1
 
-				let component = this.getComponent('AnimationComponent')
+					let component = this.getComponent('AnimationComponent')
 
-				component.sx = 3
-				component.sy = 0
+					component.sx = 3
+					component.sy = 0
+				}
+			} else if (item instanceof Lamp) {
+				this.light()
 			}
 
 			return true
@@ -62,5 +80,22 @@ export default class Campfire extends Entity {
 		}
 
 		this.lightRadius += Math.cos(this.time) * 0.1
+	}
+
+	render(p5, canvas) {
+		if (this.isLit) {
+			let component = this.getComponent('AnimationComponent')
+			let d = Math.sin(component.time * 0.1) * 5 + 20
+			component.position(p5, canvas, 0, 0)
+
+			canvas.translate(0, -4)
+			canvas.noStroke()
+			canvas.fill(244, 180, 27, 50)
+			canvas.circle(0, 0, d * 1.5, d * 1.5)
+			canvas.fill(244, 180, 27, 50)
+			canvas.circle(0, 0, d, d)
+		}
+
+		super.render(p5, canvas)
 	}
 }

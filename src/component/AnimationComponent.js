@@ -28,9 +28,8 @@ export default class AnimationComponent extends GraphicsComponent {
 		this.time += dt * 0.003
 	}
 
-	renderOne(p5, canvas, ox, oy) {
+	position(p5, canvas, ox, oy) {
 		const scale = this.entity.area.camera.scale
-		p5.push()
 
 		canvas.resetMatrix()
 		canvas.scale(scale)
@@ -55,6 +54,12 @@ export default class AnimationComponent extends GraphicsComponent {
 		}
 
 		canvas.translate(0, this.oy)
+	}
+
+	renderOne(p5, canvas, ox, oy) {
+		p5.push()
+
+		this.position(p5, canvas, ox, oy)
 
 		canvas.image(this.sprite, -this.entity.width / 2, -this.entity.height, 
 			this.entity.width, this.entity.height, 

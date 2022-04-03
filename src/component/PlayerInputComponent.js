@@ -16,19 +16,23 @@ export default class PlayerInputComponent extends Component {
 		if (p5.keyIsDown(p5.LEFT_ARROW) || p5.keyIsDown(65)) {
 			vx = -1
 			component.flipped = true
+			component.layer = 0
 		}
 
 		if (p5.keyIsDown(p5.UP_ARROW) || p5.keyIsDown(87)) {
 			vy = -1
+			component.layer = 2
 		}
 
 		if (p5.keyIsDown(p5.RIGHT_ARROW) || p5.keyIsDown(68)) {
 			vx += 1
 			component.flipped = false
+			component.layer = 0
 		}
 
 		if (p5.keyIsDown(p5.DOWN_ARROW) || p5.keyIsDown(83)) {
 			vy += 1
+			component.layer = 1
 		}
 
 		let d = Math.sqrt(vx * vx + vy * vy)
@@ -51,16 +55,21 @@ export default class PlayerInputComponent extends Component {
 			if (!wasPressed) {
 				component.sx = 2
 				component.sy = 0
+				component.animLength = 1
+				component.animStart = 0
 			} else {
 				component.sx = 0
 				component.sy = 2
+				component.animLength = 6
+				component.animStart = 1
+				component.animSpeed = 5
 			}
 		}
 
 		this.wasPressed = wasPressed
 
 		this.time += dt * 0.001
-		component.angle += ((d >= 1 ? -0.3 : Math.sin(this.time) * 0.05) * (component.flipped ? 1 : -1) - component.angle) * 0.03 * dt
+		component.angle += ((Math.abs(vx) >= 1 ? -0.3 : Math.sin(this.time) * 0.05) * (component.flipped ? 1 : -1) - component.angle) * 0.03 * dt
 
 		let s = dt * 0.01
 

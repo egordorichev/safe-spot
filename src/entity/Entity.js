@@ -70,4 +70,17 @@ export default class Entity {
 	distanceToCamera() {
 		return this.distanceTo(this.area.camera)
 	}
+	
+	addTag(tag) {
+		this.tags.push(tag)
+
+		let map = this.area.tagged.get(tag)
+		
+		if (!map) {
+			map = []
+			this.area.tagged.set(tag, map)
+		}
+
+		map.push(this)
+	}
 }
