@@ -1,5 +1,6 @@
 import Entity from './Entity'
-const locale = require('../ru')
+const ru = require('../ru')
+const en = require('../en')
 
 export default class Chat extends Entity {
 	constructor() {
@@ -9,6 +10,7 @@ export default class Chat extends Entity {
 	}
 
 	print(text, b) {
+		let locale = this.russian ? ru : en
 		let t = locale[text]
 		
 		if (b) {

@@ -32,6 +32,7 @@ export default class PlayerInputComponent extends Component {
 
 			component.sx += (1 - component.sx) * s
 			component.sy += (1 - component.sy) * s
+			
 			return
 		}
 

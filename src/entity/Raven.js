@@ -37,7 +37,7 @@ export default class Raven extends Entity {
 		this.area.tagged.get("item").forEach(e => {
 			let dd = e.distanceTo(this)
 
-			if (dd < d) {
+			if (dd < d && e.owner == null) {
 				d = dd
 				this.target = e
 			}

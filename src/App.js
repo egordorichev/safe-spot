@@ -346,6 +346,17 @@ export default class App extends React.Component {
 		this.gameCanvas.fill(255)
 		this.gameCanvas.textSize(32)
 		this.gameCanvas.text('Press X to start', p5.windowWidth / 2, p5.windowHeight / 2 + 64)
+		this.gameCanvas.textFont(this.fontBold)
+		this.gameCanvas.textSize(24)
+		this.gameCanvas.text(this.area.chat.russian ? 'Press R for english' : 'Жмякни R для русского', p5.windowWidth / 2, p5.windowHeight - 64)
+
+		let down = p5.keyIsDown(82)
+
+		if (down && !this.wasDown) {
+			this.area.chat.russian = !this.area.chat.russian
+		}
+
+		this.wasDown = down
 
 		if (p5.keyIsDown(88) || p5.keyIsDown(32) || PlayerInputComponent.controllerPressed(2) || PlayerInputComponent.controllerPressed(0)) {
 			this.menu = false
