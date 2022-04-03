@@ -45,6 +45,10 @@ export default class PlayerInputComponent extends Component {
 
 			let s = dt * 0.1
 
+			if (this.entity.item && this.entity.item.full) {
+				s *= 0.5
+			}
+
 			this.entity.x += vx * s
 			this.entity.y += vy * s	
 			wasPressed = true
