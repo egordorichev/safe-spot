@@ -8,8 +8,14 @@ export default class Chat extends Entity {
 		this.lines = []
 	}
 
-	print(text) {
-		this.lines.push([ locale[text], 10 ])
+	print(text, b) {
+		let t = locale[text]
+		
+		if (b) {
+			t += locale[b]
+		}
+
+		this.lines.push([ t, 10 ])
 	}
 
 	renderUi(p5, canvas) {

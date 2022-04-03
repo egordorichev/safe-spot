@@ -45,6 +45,8 @@ export default class Player extends Entity {
 
 			this.on.play()
 			console.log('on')
+
+			this.area.chat.print('pickup', item.constructor.name.toLowerCase() + "_name")
 		
 			item.owner = this
 
@@ -66,6 +68,7 @@ export default class Player extends Entity {
 
 		this.off.play()
 		console.log('off')
+		this.area.chat.print('drop', this.item.constructor.name.toLowerCase() + "_name")
 
 		this.item.owner = null
 		this.item.drawOrder = 0
