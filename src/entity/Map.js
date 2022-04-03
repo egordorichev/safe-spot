@@ -44,7 +44,7 @@ export default class Map extends Entity {
 	}
 
 	update(p5, dt) {
-		this.time += dt * 0.0001
+		this.time += dt * 0.001
 
 		if (this.time >= 1) {
 			this.time = 0
@@ -71,7 +71,7 @@ export default class Map extends Entity {
 							}
 						}
 
-						if (neighbours < 5 && Math.random() < 0.05) {
+						if (neighbours < 5 && Math.random() < 0.01) {
 							toRemove.push([ x, y ])
 						}
 					}

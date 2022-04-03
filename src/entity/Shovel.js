@@ -33,6 +33,6 @@ export default class Shovel extends Item {
 			let y = ~~((this.owner.y + 8) / 16)
 
 			this.area.map.setTile(x, y, this.area.map.getTile(x, y) == 0 ? (~~(Math.random() * 6) + 1) : 0)
-		}, 3000)
+		}, 2000)
 	}
 }

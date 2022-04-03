@@ -48,23 +48,23 @@ export default class App extends React.Component {
 				}
 
 				map.setTile(x, y, ~~(Math.random() * 6) + 1)
+
+				if (d > 1 && Math.random() < 0.02 * d) {
+					let item = new Plant()
+
+					item.x = x * 16
+					item.y = y * 16
+					
+					this.area.add(item)
+				}
 			}
 		}
 
-		for (let i = 0; i < 8; i++) {
+		for (let i = 0; i < 4; i++) {
 			let item = new Stick()
 
-			item.x = Math.random() * 128 - 64
-			item.y = Math.random() * 128 - 64
-			
-			this.area.add(item)
-		}
-
-		for (let i = 0; i < 8; i++) {
-			let item = new Plant()
-
-			item.x = Math.random() * 128 - 64
-			item.y = Math.random() * 128 - 64
+			item.x = Math.random() * 512 - 256
+			item.y = Math.random() * 512 - 256
 			
 			this.area.add(item)
 		}

@@ -40,7 +40,6 @@ export default class AnimationComponent extends GraphicsComponent {
 		)
 
 		canvas.rotate(this.angle)
-		canvas.scale(this.sx * (this.flipped ? 1 : -1), this.sy)
 
 		let component = this.entity.getComponent('InteractableComponent')
 
@@ -51,20 +50,30 @@ export default class AnimationComponent extends GraphicsComponent {
 			canvas.noFill()
 			canvas.rect(-this.entity.width / 2 - 1, -this.entity.height - 1, this.entity.width + 2, this.entity.height + 2)
 			canvas.translate(-ox, -oy - this.oy)
+
+			canvas.noStroke()
+			canvas.fill(255)
+
+			canvas.text('e', -2, -12)
+			canvas.textSize(8)
 		}
 
+		canvas.scale(this.sx * (this.flipped ? 1 : -1), this.sy)
 		canvas.translate(0, this.oy)
+	}
+
+	draw(p5, canvas, ox, oy) {
+		canvas.image(this.sprite, -this.entity.width / 2, -this.entity.height, 
+			this.entity.width, this.entity.height, 
+			(Math.floor((this.time * this.animSpeed) % this.animLength) + this.animStart) * this.entity.width, 
+			this.layer * this.entity.height, this.entity.width, this.entity.height)
 	}
 
 	renderOne(p5, canvas, ox, oy) {
 		p5.push()
 
 		this.position(p5, canvas, ox, oy)
-
-		canvas.image(this.sprite, -this.entity.width / 2, -this.entity.height, 
-			this.entity.width, this.entity.height, 
-			(Math.floor((this.time * this.animSpeed) % this.animLength) + this.animStart) * this.entity.width, 
-			this.layer * this.entity.height, this.entity.width, this.entity.height)
+		this.draw(p5, canvas, ox, oy)
 
 		p5.pop()
 	}
