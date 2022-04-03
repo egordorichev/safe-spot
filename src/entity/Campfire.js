@@ -85,7 +85,17 @@ export default class Campfire extends Entity {
 		component.sy += ((0.9 + Math.cos(this.time) * 0.1) - component.sy) * s
 		component.angle = Math.cos(this.time * 0.7) * 0.05 
 
-		this.lr = Math.max(0, 1 - this.time * 0.005)
+		if (this.isLit) {
+			this.lr = Math.max(0, 1 - this.time * 0.005)
+
+			if (this.lr < 0.3) {
+				component.layer = 2
+				component.animLength = 10
+			} else {
+				component.layer = 1
+				component.animLength = 13
+			}
+		}
 
 		if (this.isLit && this.lr <= 0) {
 			this.lr = 0

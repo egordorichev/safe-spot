@@ -47,7 +47,7 @@ export default class App extends React.Component {
 					continue
 				}
 
-				map.setTile(x, y, ~~(Math.random() * 6) + 1)
+				map.setTile(x, y, Math.random() < 0.08 ? 7 : ~~(Math.random() * 6) + 1)
 
 				if (d > 1 && Math.random() < 0.02 * d) {
 					let item = new Plant()
@@ -60,7 +60,7 @@ export default class App extends React.Component {
 			}
 		}
 
-		for (let i = 0; i < 4; i++) {
+		for (let i = 0; i < 8; i++) {
 			let item = new Stick()
 
 			item.x = Math.random() * 512 - 256

@@ -29,10 +29,15 @@ export default class Shovel extends Item {
 
 			this.beingUsed = false
 
-			let x = ~~((this.owner.x + 8) / 16)
-			let y = ~~((this.owner.y + 8) / 16)
+			let x = ~~((this.owner.x + 4) / 16)
+			let y = ~~((this.owner.y) / 16)
+			let tile = this.area.map.getTile(x, y)
 
-			this.area.map.setTile(x, y, this.area.map.getTile(x, y) == 0 ? (~~(Math.random() * 6) + 1) : 0)
+			if (tile == 7) {
+				this.area.map.setTile(x, y, 8)
+			} else {
+				this.area.map.setTile(x, y, tile == 0 ? (~~(Math.random() * 7) + 1) : 0)
+			}
 		}, 2000)
 	}
 }
