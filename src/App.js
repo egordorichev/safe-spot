@@ -245,7 +245,13 @@ export default class App extends React.Component {
 				continue
 			}
 
-			this.spookySounds.push(new Howl({ src: [`sfx/SF${i}.wav`], loop: true }))
+			this.spookySounds.push(new Howl({ src: [`sfx/SF${i}.wav`] }))
+		}
+
+		this.shreekSounds = []
+		
+		for (let i = 1; i < 4; i++) {
+			this.shreekSounds.push(new Howl({ src: [`sfx/Shriek${i}.wav`], volume: 0.5 }))
 		}
 	}
 
@@ -357,7 +363,7 @@ export default class App extends React.Component {
 
 	drawGame(p5) {
 		p5.shader(this.shader)
-		this.shader.setUniform('enabled', (!this.area.glitchFlash || Math.cos(this.time * 0.1) > -0.99) && this.time > 10 && (this.time < 15 || this.time > 20))
+		this.shader.setUniform('enabled', (!this.area.glitchFlash || Math.cos(this.time * 0.1) > -0.99)/* && this.time > 10 && (this.time < 15 || this.time > 20)*/)
 
 		this.time += p5.deltaTime * 0.01
 
@@ -422,6 +428,7 @@ export default class App extends React.Component {
 					[ 'pet', 6 ]
 				]
 
+				this.shreekSounds[~~(Math.random() * 3)].play()
 				let choice = choices[~~(Math.random() * choices.length)]
 				this.area.chat.print(`${choice[0]}_${Math.min(choice[1] - 1, this.spookLevel)}`)
 			}

@@ -61,8 +61,6 @@ export default class Plant extends Entity {
 
 				if (d > 64) {
 					this.time -= dt * 0.001
-				} else {
-					console.log('lit')
 				}
 			}
 
