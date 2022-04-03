@@ -4,14 +4,14 @@ precision mediump float;
 
 varying vec2 vTexCoord;
 uniform sampler2D tex0;
-uniform vec2 light0;
-uniform vec2 light1;
-uniform vec2 light2;
-uniform vec2 light3;
-uniform vec2 light4;
-uniform vec2 light5;
-uniform vec2 light6;
-uniform vec2 light7;
+uniform vec3 light0;
+uniform vec3 light1;
+uniform vec3 light2;
+uniform vec3 light3;
+uniform vec3 light4;
+uniform vec3 light5;
+uniform vec3 light6;
+uniform vec3 light7;
 uniform vec2 size;
 
 const float PI = 3.1415926535;
@@ -66,7 +66,7 @@ void main() {
   {
     float dx = light0.x - uv.x;
     float dy = (light0.y - uv.y) * ratio;
-    float dd = sqrt(dx * dx + dy * dy);
+    float dd = sqrt(dx * dx + dy * dy) * light0.z;
 
     d = min(d, dd);
   }
@@ -74,7 +74,7 @@ void main() {
   {
     float dx = light1.x - uv.x;
     float dy = (light1.y - uv.y) * ratio;
-    float dd = sqrt(dx * dx + dy * dy);
+    float dd = sqrt(dx * dx + dy * dy) * light1.z;
 
     d = min(d, dd);
   }
@@ -82,7 +82,7 @@ void main() {
   {
     float dx = light2.x - uv.x;
     float dy = (light2.y - uv.y) * ratio;
-    float dd = sqrt(dx * dx + dy * dy);
+    float dd = sqrt(dx * dx + dy * dy) * light2.z;
 
     d = min(d, dd);
   }
@@ -90,7 +90,7 @@ void main() {
   {
     float dx = light3.x - uv.x;
     float dy = (light3.y - uv.y) * ratio;
-    float dd = sqrt(dx * dx + dy * dy);
+    float dd = sqrt(dx * dx + dy * dy) * light3.z;
 
     d = min(d, dd);
   }
@@ -98,7 +98,7 @@ void main() {
   {
     float dx = light4.x - uv.x;
     float dy = (light4.y - uv.y) * ratio;
-    float dd = sqrt(dx * dx + dy * dy);
+    float dd = sqrt(dx * dx + dy * dy) * light4.z;
 
     d = min(d, dd);
   }
@@ -106,7 +106,7 @@ void main() {
   {
     float dx = light5.x - uv.x;
     float dy = (light5.y - uv.y) * ratio;
-    float dd = sqrt(dx * dx + dy * dy);
+    float dd = sqrt(dx * dx + dy * dy) * light5.z;
 
     d = min(d, dd);
   }
@@ -114,7 +114,7 @@ void main() {
   {
     float dx = light6.x - uv.x;
     float dy = (light6.y - uv.y) * ratio;
-    float dd = sqrt(dx * dx + dy * dy);
+    float dd = sqrt(dx * dx + dy * dy) * light6.z;
 
     d = min(d, dd);
   }
@@ -122,12 +122,12 @@ void main() {
   {
     float dx = light7.x - uv.x;
     float dy = (light7.y - uv.y) * ratio;
-    float dd = sqrt(dx * dx + dy * dy);
+    float dd = sqrt(dx * dx + dy * dy) * light7.z;
 
     d = min(d, dd);
   }
 
   float vv = max(0.0, 1.0 - d * d * d * 80.0);
 
-	gl_FragColor = vec4(color.r * vv + gray * (1.0 - vv), color.g * vv + gray * (1.0 - vv), color.b * vv + gray * (1.0 - vv), 1.0 - l * 0.8);
+	gl_FragColor = vec4(color.r * vv + gray * (1.0 - vv), color.g * vv + gray * (1.0 - vv), color.b * vv + gray * (1.0 - vv), 1.0 - d * 2.5); // 1.0 - l * 0.8);
 }

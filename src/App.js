@@ -3,6 +3,7 @@ import Sketch from 'react-p5'
 import Area from './Area'
 import Camera from './entity/Camera'
 import Item from './entity/Item'
+import Stick from './entity/Stick'
 import Player from './entity/Player'
 import Tile from './entity/Tile'
 import Campfire from './entity/Campfire'
@@ -38,11 +39,11 @@ export default class App extends React.Component {
 			this.area.add(campfire)
 		}
 
-		for (let x = -16; x < 16; x++) {
-			for (let y = -16; y < 16; y++) {
+		for (let x = -8; x < 8; x++) {
+			for (let y = -8; y < 8; y++) {
 				let d = Math.sqrt(x * x + y * y)
 
-				if (d > 8 && Math.random() * 16 < d) {
+				if (d > 4 && Math.random() * 8 < d) {
 					continue
 				}
 
@@ -53,6 +54,15 @@ export default class App extends React.Component {
 
 				this.area.add(item)
 			}
+		}
+
+		for (let i = 0; i < 8; i++) {
+			let item = new Stick()
+
+			item.x = Math.random() * 128 - 64
+			item.y = Math.random() * 128 - 64
+			
+			this.area.add(item)
 		}
 	}
 
@@ -106,7 +116,8 @@ export default class App extends React.Component {
 
 			this.shader.setUniform('light' + i, [ 
 				0.5 + (x - this.camera.x) / p5.windowWidth * this.camera.scale, 
-				0.5 + (y - this.camera.y) / p5.windowHeight * this.camera.scale
+				0.5 + (y - this.camera.y) / p5.windowHeight * this.camera.scale,
+				e ? 1 / e.lightRadius : 100
 			])
 		}
 

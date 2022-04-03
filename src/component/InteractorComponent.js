@@ -6,5 +6,6 @@ export default class InteractorComponent extends Component {
 
 		this.id = 'InteractorComponent'
 		this.callback = callback
+		this.collidingWith = null
 	}
 }

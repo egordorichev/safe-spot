@@ -16,7 +16,9 @@ export default class Player extends Entity {
 		this.addComponent(new PlayerInputComponent())
 		this.addComponent(new CollisionCheckerComponent())
 		this.addComponent(new InteractorComponent(this.interact.bind(this)))
+
 		this.tags = ["light"]
+		this.lightRadius = 1
 	}	
 
 	interact(e) {
@@ -28,7 +30,15 @@ export default class Player extends Entity {
 	pickup(item) {
 		if (!this.dropItem()) {
 			item.owner = this
+
+			this.getComponent('InteractorComponent').collidingWith = null
 			this.item = item
+			this.item.drawOrder = 1
+
+			let component = this.getComponent('PlayerGraphicsComponent')
+
+			component.sx = 2
+			component.sy = 0
 		}
 	}
 
@@ -38,6 +48,26 @@ export default class Player extends Entity {
 		}
 
 		this.item.owner = null
+		this.item.drawOrder = 0
+
+		let component = this.item.getComponent('AnimationComponent')
+
+		component.sx = 3
+		component.sy = 0
+
+		component = this.getComponent('PlayerGraphicsComponent')
+
+		component.sx = 2
+		component.sy = 0
+
+		this.handleEvent('collision_started', {
+			entity: this.item
+		})
+
+		this.item.handleEvent('collision_started', {
+			entity: this
+		})
+
 		this.item = null
 
 		return true
