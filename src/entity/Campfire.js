@@ -22,14 +22,21 @@ export default class Campfire extends Entity {
 	interact(e) {
 		if (e instanceof Player) {
 			let item = e.item
-			console.log(item)
+
+			if (item != null && item.done) {
+				return false
+			}
 
 			if (item instanceof Stick) {
-				console.log('stcik')
 				e.dropItem()
 				item.done = true
 
 				this.time -= 1
+
+				let component = this.getComponent('AnimationComponent')
+
+				component.sx = 3
+				component.sy = 0
 			}
 
 			return true
@@ -39,14 +46,16 @@ export default class Campfire extends Entity {
 	update(p5, dt) {
 		super.update(p5, dt)
 
-		this.time += dt * 0.005
+		this.time += dt * 0.001
 		let component = this.getComponent('AnimationComponent')
 
-		component.sx = 0.9 + Math.sin(this.time) * 0.1
-		component.sy = 0.9 + Math.cos(this.time) * 0.1
+		let s = dt * 0.01
+
+		component.sx += ((0.9 + Math.sin(this.time) * 0.1) - component.sx) * s
+		component.sy += ((0.9 + Math.cos(this.time) * 0.1) - component.sy) * s
 		component.angle = Math.cos(this.time * 0.7) * 0.05 
 
-		this.lightRadius = 1.0 - this.time * 0.01
+		this.lightRadius = Math.max(0, 1 - this.time * 0.01)
 
 		if (this.lightRadius < 0) {
 			this.done = true

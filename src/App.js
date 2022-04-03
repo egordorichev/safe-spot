@@ -7,6 +7,7 @@ import Stick from './entity/Stick'
 import Player from './entity/Player'
 import Tile from './entity/Tile'
 import Campfire from './entity/Campfire'
+import Lamp from './entity/Lamp'
 
 export default class App extends React.Component {
 	setup(p5, ref) {
@@ -21,23 +22,14 @@ export default class App extends React.Component {
 		context.imageSmoothingEnabled = false;
 
 		this.area = new Area(p5)
+		this.time = 0
 
 		this.area.add(this.player = new Player())
 		this.area.add(this.camera = new Camera(this.player))
 
-		{
-			let campfire = new Campfire()
-			campfire.x = 64
-			campfire.y = 64
-			this.area.add(campfire)
-		}
-
-		{
-			let campfire = new Campfire()
-			campfire.x = -128
-			campfire.y = -64
-			this.area.add(campfire)
-		}
+		let lamp = new Lamp()
+		lamp.y = 32
+		this.area.add(lamp)
 
 		for (let x = -8; x < 8; x++) {
 			for (let y = -8; y < 8; y++) {
@@ -83,6 +75,7 @@ export default class App extends React.Component {
 	}
 
 	draw(p5) {
+		this.time += p5.deltaTime * 0.01
 		this.area.update(p5, p5.deltaTime)
 
 		this.gameCanvas.background(0)
@@ -97,6 +90,7 @@ export default class App extends React.Component {
 
 		p5.shader(this.shader)
 
+		this.shader.setUniform('time', this.time)
 		this.shader.setUniform('tex0', this.gameCanvas)
 		this.shader.setUniform('size', [ p5.windowWidth, p5.windowHeight ])
 

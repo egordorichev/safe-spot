@@ -18,13 +18,15 @@ export default class InteractableComponent extends Component {
 	update(p5, dt) {
 		let down = p5.keyIsDown(69) || p5.keyIsDown(32) || p5.keyIsDown(70)
 
-		if (this.colliding != null && down && !this.wasDown) {
+		if (this.colliding != null && down && !this.wasDown && !this.entity.done) {
 			let component = this.colliding.getComponent('InteractorComponent')
 			
 			if (this.entity.owner != null || component.collidingWith == this.entity) {
-				if (!this.callback(this.colliding)) {
-					component.callback(this.entity)
-				}
+				setTimeout(() => {
+					if (!this.callback(this.colliding)) {
+						component.callback(this.entity)
+					}
+				}, 1)
 			}
 		}
 
@@ -35,7 +37,7 @@ export default class InteractableComponent extends Component {
 		if (e == 'collision_started') {
 			let component = data.entity.getComponent('InteractorComponent')
 
-			if (component) {
+			if (data.entity != this.entity && component) {
 				this.colliding = data.entity
 				component.collidingWith = this.entity
 			}

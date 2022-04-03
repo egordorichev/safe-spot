@@ -13,6 +13,7 @@ uniform vec3 light5;
 uniform vec3 light6;
 uniform vec3 light7;
 uniform vec2 size;
+uniform float time;
 
 const float PI = 3.1415926535;
 
@@ -44,7 +45,7 @@ void main() {
     
     float n = length(vec2(x, y));
     
-    float z = sqrt(1.0 - n * n * 0.2);
+    float z = sqrt(1.0 - n * n * 0.2 * ((sin(time * 0.1) * 2.0 + 1.0) * 0.1));
   
     float r = atan(n, z) / PI * 2.0; 
   

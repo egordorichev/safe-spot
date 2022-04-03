@@ -9,11 +9,12 @@ export default class AnimationComponent extends GraphicsComponent {
 		this.sx = 1
 		this.sy = 1
 		this.angle = 0
-		this.time = 0
+		this.time = Math.random() * Math.PI * 2
 		this.animStart = 0
 		this.animLength = 1
 		this.animSpeed = 1
 		this.layer = 0
+		this.oy = 0
 
 		this.id = 'AnimationComponent'
 	}
@@ -45,12 +46,15 @@ export default class AnimationComponent extends GraphicsComponent {
 		let component = this.entity.getComponent('InteractableComponent')
 
 		if (component && component.colliding && component.owner == null && component.colliding.getComponent('InteractorComponent').collidingWith == this.entity) {
-			canvas.translate(ox, oy)
+			canvas.translate(ox, oy + this.oy)
 			canvas.strokeWeight(1)
 			canvas.stroke(255)
 			canvas.noFill()
 			canvas.rect(-this.entity.width / 2 - 1, -this.entity.height - 1, this.entity.width + 2, this.entity.height + 2)
+			canvas.translate(-ox, -oy - this.oy)
 		}
+
+		canvas.translate(0, this.oy)
 
 		canvas.image(this.sprite, -this.entity.width / 2, -this.entity.height, 
 			this.entity.width, this.entity.height, 

@@ -16,19 +16,30 @@ export default class Player extends Entity {
 		this.addComponent(new PlayerInputComponent())
 		this.addComponent(new CollisionCheckerComponent())
 		this.addComponent(new InteractorComponent(this.interact.bind(this)))
-
-		this.tags = ["light"]
-		this.lightRadius = 1
 	}	
 
 	interact(e) {
 		if (e instanceof Item) {
-			this.pickup(e)
+			// Hackz
+			setTimeout(() => this.pickup(e), 0)
+		}
+	}
+
+	update(p5, dt) {
+		super.update(p5, dt)
+
+		if (this.item != null && this.item.done) {
+			this.item.owner = null
+			this.item = null
 		}
 	}
 
 	pickup(item) {
 		if (!this.dropItem()) {
+			if (item.done) {
+				return
+			}
+
 			item.owner = this
 
 			this.getComponent('InteractorComponent').collidingWith = null
@@ -39,6 +50,8 @@ export default class Player extends Entity {
 
 			component.sx = 2
 			component.sy = 0
+
+			console.log('pickup', item)
 		}
 	}
 

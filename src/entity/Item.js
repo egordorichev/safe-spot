@@ -18,22 +18,30 @@ export default class Item extends Entity {
 
 	interact(e) {
 		if (e instanceof Player && this.owner == null) {
-			e.pickup(this)
-			let component = this.getComponent('AnimationComponent')
-
-			component.sx = 3
-			component.sy = 0
-
-			return true
+			return this.handlePickupInteraction(e)
 		}
+	}
+
+	handlePickupInteraction(e) {
+		e.pickup(this)
+		let component = this.getComponent('AnimationComponent')
+
+		component.sx = 3
+		component.sy = 0
+
+		return true
 	}
 
 	update(p5, dt) {
 		super.update(p5, dt)
 
 		if (this.owner != null) {
-			this.x = this.owner.x + 4
-			this.y = this.owner.y - 3
+			if (this.done) {
+				this.owner = null
+			} else {
+				this.x = this.owner.x + 4
+				this.y = this.owner.y - 3
+			}
 		}
 
 		let s = dt * 0.01
@@ -41,5 +49,13 @@ export default class Item extends Entity {
 
 		component.sx += (1 - component.sx) * s
 		component.sy += (1 - component.sy) * s
+
+		if (this.owner == null) {
+			component.oy = 0
+		} else {
+			component.oy = Math.cos(component.time * 0.9) * 2
+		}
+
+		component.angle = Math.sin(component.time) * 0.1
 	}
 }
