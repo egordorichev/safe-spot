@@ -2,11 +2,9 @@ import React from 'react'
 import Sketch from 'react-p5'
 import Area from './Area'
 import Camera from './entity/Camera'
-import Item from './entity/Item'
+import Shovel from './entity/Shovel'
 import Stick from './entity/Stick'
 import Player from './entity/Player'
-import Tile from './entity/Tile'
-import Campfire from './entity/Campfire'
 import Lamp from './entity/Lamp'
 import Plant from './entity/Plant'
 import Map from './entity/Map'
@@ -33,8 +31,13 @@ export default class App extends React.Component {
 		lamp.y = 32
 		this.area.add(lamp)
 
+		let shovel = new Shovel()
+		shovel.x = 32
+		this.area.add(shovel)
+
 		let map = new Map()
 		this.area.add(map)
+		this.area.map = map
 
 		for (let x = -8; x < 8; x++) {
 			for (let y = -8; y < 8; y++) {

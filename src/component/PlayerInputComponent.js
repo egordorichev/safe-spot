@@ -6,6 +6,7 @@ export default class PlayerInputComponent extends Component {
 		this.id = 'PlayerInputComponent'
 		this.time = 0
 		this.wasPressed = false
+		this.wasUsePressed = false
 	}
 
 	update(p5, dt) {
@@ -67,6 +68,19 @@ export default class PlayerInputComponent extends Component {
 		}
 
 		this.wasPressed = wasPressed
+
+		wasPressed = p5.keyIsDown(32)
+
+		if (this.wasUsePressed && !wasPressed) {
+			component.sx = 2
+			component.sy = 0
+
+			if (this.entity.item != null) {
+				this.entity.item.use()
+			}
+		}
+
+		this.wasUsePressed = wasPressed
 
 		this.time += dt * 0.001
 		component.angle += ((Math.abs(vx) >= 1 ? -0.3 : Math.sin(this.time) * 0.05) * (component.flipped ? 1 : -1) - component.angle) * 0.03 * dt

@@ -31,15 +31,25 @@ export default class Map extends Entity {
 		this.maxY = Math.max(this.maxY, y)
 	}
 
+	getTile(x, y) {
+		let array = this.tiles[y]
+
+		if (!array) {
+			return 0
+		}
+
+		return array[x] ?? 0
+	}
+
 	render(p5, canvas) {
-		for (let y = this.minY; y < this.maxY; y++) {
+		for (let y = this.minY; y <= this.maxY; y++) {
 			let row = this.tiles[y]
 
 			if (!row) {
 				continue
 			}
 			
-			for (let x = this.minX; x < this.maxX; x++) {
+			for (let x = this.minX; x <= this.maxX; x++) {
 				let tile = row[x]
 
 				if (tile && tile > 0) {

@@ -43,10 +43,11 @@ export default class Item extends Entity {
 				this.owner = null
 			} else {
 				this.x = this.owner.x + 4
-				this.y = this.owner.y - 3
+				this.y = this.owner.y + 4
+				component.flipped = this.owner.graphicsComponent.flipped
 			}
 
-			let down = (p5.keyIsDown(69) || p5.keyIsDown(32) || p5.keyIsDown(70))
+			let down = (p5.keyIsDown(69) || p5.keyIsDown(70))
 
 			if (component.time > 0.3 && down && !this.wasDown) {
 				setTimeout(() => {

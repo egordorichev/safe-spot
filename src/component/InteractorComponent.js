@@ -10,7 +10,7 @@ export default class InteractorComponent extends Component {
 	}
 
 	update(p5, dt) {
-		let down = p5.keyIsDown(69) || p5.keyIsDown(32) || p5.keyIsDown(70)
+		let down = p5.keyIsDown(69) || p5.keyIsDown(70)
 
 		if (this.collidingWith != null && down && !this.wasDown && !this.entity.done) {
 			let component = this.collidingWith.getComponent('InteractableComponent')
