@@ -29,8 +29,8 @@ export default class Shovel extends Tool {
 
 			this.beingUsed = false
 
-			let x = Math.floor((this.x + 8) / 16)
-			let y = Math.floor((this.y) / 16)
+			let x = Math.floor((this.owner.x + 8) / 16)
+			let y = Math.floor((this.owner.y) / 16)
 			let tile = this.area.map.getTile(x, y)
 
 			if (tile == 7) {

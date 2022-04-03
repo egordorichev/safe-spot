@@ -73,6 +73,19 @@ export default class Campfire extends Entity {
 		}
 	}
 
+	putOut() {
+		let component = this.getComponent('AnimationComponent')
+
+		this.lr = 0
+		this.isLit = false
+
+		component.layer = 0
+		component.animStart = 0
+		component.animLength = 1
+
+		this.removeTag("light")
+	}
+
 	update(p5, dt) {
 		super.update(p5, dt)
 
@@ -98,14 +111,7 @@ export default class Campfire extends Entity {
 		}
 
 		if (this.isLit && this.lr <= 0) {
-			this.lr = 0
-			this.isLit = false
-
-			component.layer = 0
-			component.animStart = 0
-			component.animLength = 1
-
-			this.removeTag("light")
+			this.putOut()
 		}
 
 		if (this.isLit) {

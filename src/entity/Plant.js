@@ -53,4 +53,8 @@ export default class Plant extends Entity {
 		this.graphicsComponent.draw(p5, canvas, 0, 0)
 		p5.pop()
 	}
+
+	water() {
+		
+	}
 }
