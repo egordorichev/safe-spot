@@ -144,10 +144,10 @@ export default class App extends React.Component {
 		this.font = p5.loadFont('font.ttf')
 		this.fontBold = p5.loadFont('fontbold.ttf')
 	
-		this.menuMusic = new Howl({ src: ['menu.wav'], loop: true })
-		this.deathMusic = new Howl({ src: ['death.wav'], loop: false })
+		this.menuMusic = new Howl({ volume: 0.3, src: ['menu.wav'], loop: true })
+		this.deathMusic = new Howl({ volume: 0.3, src: ['death.wav'], loop: false })
 
-		this.ravenMusic = new Howl({ src: ['ravens.wav'], onend: () => {
+		this.ravenMusic = new Howl({ volume: 0.3, src: ['ravens.wav'], onend: () => {
 			if (!this.nextMusic) {
 				this.nextMusic = this.commonMusic
 			}
@@ -157,7 +157,7 @@ export default class App extends React.Component {
 			this.currentMusic = this.nextMusic
 		}})
 
-		this.dangerMusic = new Howl({ src: ['danger.wav'], onend: () => {
+		this.dangerMusic = new Howl({ volume: 0.3, src: ['danger.wav'], onend: () => {
 			if (!this.nextMusic) {
 				this.nextMusic = this.commonMusic
 			}
@@ -167,7 +167,7 @@ export default class App extends React.Component {
 			this.currentMusic = this.nextMusic
 		}})
 
-		this.commonMusic = new Howl({ src: ['common.wav'], onend: () => {
+		this.commonMusic = new Howl({ volume: 0.3, src: ['common.wav'], onend: () => {
 			if (!this.nextMusic) {
 				this.nextMusic = this.commonMusic
 			}
@@ -193,7 +193,7 @@ export default class App extends React.Component {
 			this.currentMusic = this.nextMusic
 		}})
 
-		this.bassDrumMusic = new Howl({ src: ['bass_drum.wav'], onend: () => {
+		this.bassDrumMusic = new Howl({ volume: 0.3, src: ['bass_drum.wav'], onend: () => {
 			setTimeout(() => {
 				if (this.gameOver || this.menu) {
 					return
@@ -204,7 +204,7 @@ export default class App extends React.Component {
 			}, 5000)
 		}})
 
-		this.bassMusic = new Howl({ src: ['bass.wav'], onend: () => {
+		this.bassMusic = new Howl({ volume: 0.3, src: ['bass.wav'], onend: () => {
 			setTimeout(() => {
 				if (this.gameOver || this.menu) {
 					return
@@ -215,7 +215,7 @@ export default class App extends React.Component {
 			}, 5000)
 		}})
 
-		this.beginningMusic = new Howl({ src: ['beginning.wav'], onend: () => {
+		this.beginningMusic = new Howl({ volume: 0.3, src: ['beginning.wav'], onend: () => {
 			setTimeout(() => {
 				this.bassMusic.play()
 				this.currentMusic = this.bassMusic
@@ -310,7 +310,7 @@ export default class App extends React.Component {
 			this.gameOver = false
 
 			this.menuMusic?.stop();
-			// this.beginningMusic.play();
+			this.beginningMusic.play();
 			this.currentMusic = this.beginningMusic
 		}
 	}
@@ -376,7 +376,19 @@ export default class App extends React.Component {
 
 			if (Math.random() < 0.5) {
 				this.spookLevel = Math.min(7, this.spookLevel + 1)
-				this.area.chat.print(`wife_${this.spookLevel}`)
+
+				let choices = [
+					[ 'wife', 8 ],
+					[ 'kid', 7 ],
+					[ 'parents', 5 ],
+					[ 'friends', 5 ],
+					[ 'author', 6 ],
+					[ 'colleague', 6 ],
+					[ 'pet', 6 ]
+				]
+
+				let choice = choices[~~(Math.random() * choices.length)]
+				this.area.chat.print(`${choice[0]}_${Math.min(choice[1] - 1, this.spookLevel)}`)
 			}
 		}
 

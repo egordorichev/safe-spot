@@ -130,6 +130,7 @@ void main() {
   }
 
   float vv = max(0.0, 1.0 - d * d * d * 80.0);
+  float vvv = vv * vv * vv * 1.5;
 
-	gl_FragColor = enabled < 0.5 ? color: vec4(color.r * vv + gray * (1.0 - vv), color.g * vv + gray * (1.0 - vv), color.b * vv + gray * (1.0 - vv), 1.0 - d * 2.5); // 1.0 - l * 0.8);
+	gl_FragColor = enabled < 0.5 ? color: vec4(color.r * vvv + gray * (1.0 - vv), color.g * vvv + gray * (1.0 - vv), color.b * vvv + gray * (1.0 - vv), 1.0 - d * 2.5); // 1.0 - l * 0.8);
 }
