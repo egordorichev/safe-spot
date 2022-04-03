@@ -1,4 +1,5 @@
 import Item from './Item'
+import Seed from './Seed'
 
 export default class Lamp extends Item {
 	addComponents() {
@@ -13,6 +14,29 @@ export default class Lamp extends Item {
 		component.layer = 6
 		component.animLength = 10
 		component.animSpeed = 5
+	}
+
+	interact(e) {
+		let item = e.item
+		
+		if (item) {
+			if (item instanceof Seed) {
+				let component = this.getComponent('AnimationComponent')
+
+				e.dropItem()
+				item.done = true
+
+				this.time -= 1.5
+				this.lr = 1.5
+
+				component.sx = 3
+				component.sy = 0
+			}
+
+			return true
+		}
+
+		return super.interact(e)
 	}
 
 	update(p5, dt) {

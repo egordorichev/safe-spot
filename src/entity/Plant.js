@@ -23,7 +23,6 @@ export default class Plant extends Entity {
 
 			let x = Math.floor((this.x + 8) / 16)
 			let y = Math.floor((this.y) / 16)
-			let tile = this.area.map.getTile(x, y)
 
 			for (let ox = -2; ox <= 2; ox++) {
 				for (let oy = -2; oy <= 2; oy++) {
@@ -46,7 +45,7 @@ export default class Plant extends Entity {
 				items.push(new Stick())
 			}
 
-			for (let i = 0; i <= ~~(Math.random() * 2); i++) {
+			if (Math.random() < 0.5) {
 				items.push(new Seed())
 			}
 

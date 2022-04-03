@@ -43,8 +43,6 @@ export default class Player extends Entity {
 
 			component.sx = 2
 			component.sy = 0
-
-			console.log('pickup', item)
 		}
 	}
 

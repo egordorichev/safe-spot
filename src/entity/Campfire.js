@@ -4,6 +4,7 @@ import Entity from './Entity'
 import Player from './Player'
 import Stick from './Stick'
 import Lamp from './Lamp'
+import Seed from './Seed'
 
 export default class Campfire extends Entity {
 	addComponents() {
@@ -53,6 +54,28 @@ export default class Campfire extends Entity {
 					item.done = true
 
 					this.time -= 1
+					this.lr = 1
+
+					component.sx = 3
+					component.sy = 0
+				} else if (component.animStart < 3) {
+					component.animStart++
+
+					e.dropItem()
+					item.done = true
+
+					component.sx = 3
+					component.sy = 0
+				}
+			} else if (item instanceof Seed) {
+				let component = this.getComponent('AnimationComponent')
+
+				if (this.isLit) { 
+					e.dropItem()
+					item.done = true
+
+					this.time -= 1.5
+					this.lr = 1.5
 
 					component.sx = 3
 					component.sy = 0
@@ -122,7 +145,7 @@ export default class Campfire extends Entity {
 	render(p5, canvas) {
 		if (this.isLit) {
 			let component = this.getComponent('AnimationComponent')
-			let d = (Math.sin(component.time * 0.1) * 5 + 20) * this.lightRadius
+			let d = (Math.sin(component.time * 0.1) * 5 + 20) * this.lr
 			component.position(p5, canvas, 0, 0)
 
 			canvas.translate(0, -4)
