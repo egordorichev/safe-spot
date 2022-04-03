@@ -7,6 +7,7 @@ import Stick from './entity/Stick'
 import Player from './entity/Player'
 import Lamp from './entity/Lamp'
 import Plant from './entity/Plant'
+import WateringCan from './entity/WateringCan'
 import Map from './entity/Map'
 
 export default class App extends React.Component {
@@ -28,12 +29,17 @@ export default class App extends React.Component {
 		this.area.add(this.camera = new Camera(this.player))
 
 		let lamp = new Lamp()
-		lamp.y = 32
+		lamp.y = 24
 		this.area.add(lamp)
 
 		let shovel = new Shovel()
-		shovel.x = 32
+		shovel.x = 24
 		this.area.add(shovel)
+
+		let wateringCan = new WateringCan()
+		wateringCan.x = 16
+		wateringCan.y = -16
+		this.area.add(wateringCan)
 
 		let map = new Map()
 		this.area.add(map)
