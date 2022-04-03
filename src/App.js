@@ -13,6 +13,7 @@ import Raven from './entity/Raven'
 import Memory from './entity/Memory'
 import Chat from './entity/Chat'
 import Firefly from './entity/Firefly'
+import Fx from './entity/Fx'
 import PlayerInputComponent from './component/PlayerInputComponent'
 
 import { Howl } from 'howler'
@@ -70,6 +71,13 @@ export default class App extends React.Component {
 			firefly.x = Math.random() * 512 - 256
 			firefly.y = Math.random() * 512 - 256
 			this.area.add(firefly)
+		}
+
+		for (let i = 0; i < 32; i++) {
+			let fx = new Fx()
+			fx.x = Math.random() * 512 - 256
+			fx.y = Math.random() * 512 - 256
+			this.area.add(fx)
 		}
 
 		let wateringCan = new WateringCan()

@@ -21,7 +21,7 @@ export default class Plant extends Entity {
 	update(p5, dt) {
 		super.update(p5, dt)
 
-		if (this.graphicsComponent.time > 20) {
+		if (this.graphicsComponent.time > 20 && this.graphicsComponent.layer != 5) {
 			this.graphicsComponent.time = 0
 
 			let x = Math.floor((this.x + 8) / 16)
