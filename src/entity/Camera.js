@@ -8,6 +8,7 @@ export default class Camera extends Entity {
 		this.width = 0
 		this.height = 0
 		this.scale = 5
+		this.time = 0
 	}
 
 	init() {
@@ -17,15 +18,24 @@ export default class Camera extends Entity {
 	update(p5, dt) {
 		let s = dt * 0.005
 
+		this.time += dt * 0.01
 		this.x += (this.target.x - this.x) * s
 		this.y += (this.target.y - this.y) * s
 	}
 
 	apply(p5, canvas) {
+		let ox = 0
+		let oy = 0
+
+		if (this.shake) {
+			ox = Math.sin(this.time) * 0.5
+			oy = Math.cos(this.time * 0.7) * 1
+		}
+
 		canvas.scale(this.scale)
 		canvas.translate(
-			-this.x + canvas.width / 2 / this.scale,
-			-this.y + canvas.height / 2 / this.scale)
+			-this.x + canvas.width / 2 / this.scale + ox,
+			-this.y + canvas.height / 2 / this.scale + oy)
 	}
 
 	renderGrid(p5, canvas) {

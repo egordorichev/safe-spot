@@ -64,10 +64,24 @@ export default class AnimationComponent extends GraphicsComponent {
 	}
 
 	draw(p5, canvas, ox, oy) {
+		if (this.entity.area.glitchBlack && Math.sin(this.time * 0.3) < -0.95) {
+			canvas.tint(0)
+		}
+
+		if (this.entity.area.glitchFlip && Math.cos(this.time * 0.5) < -0.999) {
+			canvas.scale(1, -1)
+		}
+
+		if (this.entity.area.glitchRotate && Math.cos(this.time * 0.4) < -0.95) {
+			canvas.rotate(Math.PI * 0.5)
+		}
+
 		canvas.image(this.sprite, -this.entity.width / 2, -this.entity.height, 
 			this.entity.width, this.entity.height, 
 			(Math.floor((this.time * this.animSpeed) % this.animLength) + this.animStart) * this.entity.width, 
 			this.layer * this.entity.height, this.entity.width, this.entity.height)
+
+		canvas.noTint()
 	}
 
 	renderOne(p5, canvas, ox, oy) {

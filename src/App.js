@@ -10,6 +10,7 @@ import Plant from './entity/Plant'
 import WateringCan from './entity/WateringCan'
 import Map from './entity/Map'
 import Raven from './entity/Raven'
+import Memory from './entity/Memory'
 import Chat from './entity/Chat'
 import PlayerInputComponent from './component/PlayerInputComponent'
 
@@ -43,6 +44,7 @@ export default class App extends React.Component {
 
 		this.area = new Area(p5)
 		this.time = 0
+		this.area.glitchBlack = false
 
 		this.area.add(this.player = new Player())
 		this.area.add(this.camera = new Camera(this.player))
@@ -57,6 +59,10 @@ export default class App extends React.Component {
 		let shovel = new Shovel()
 		shovel.x = 24
 		this.area.add(shovel)
+
+		let memory = new Memory("memory_zakolka")
+		memory.x = -24
+		this.area.add(memory)
 
 		let wateringCan = new WateringCan()
 		wateringCan.x = 16
@@ -343,9 +349,31 @@ export default class App extends React.Component {
 
 	drawGame(p5) {
 		p5.shader(this.shader)
-		this.shader.setUniform('enabled', this.time > 10 && (this.time < 15 || this.time > 20))
+		this.shader.setUniform('enabled', (!this.area.glitchFlash || Math.cos(this.time * 0.1) > -0.99) && this.time > 10 && (this.time < 15 || this.time > 20))
 
 		this.time += p5.deltaTime * 0.01
+		console.log(this.time)
+
+		if (this.time > 5000) {
+			this.area.glitchRotate = true
+		}
+
+		if (this.time > 4000) {
+			this.area.camera.shake = true
+		}
+		
+		if (this.time > 3000) {
+			this.area.glitchFlip = true
+		} 
+		
+		if (this.time > 2000) {
+			this.area.glitchBlack = true
+		} 
+		
+		if (this.time > 1000) {
+			this.area.glitchFlash = true
+		}
+
 		this.ravenTimer -= p5.deltaTime * 0.001
 
 		if (this.ravenTimer <= 0) {
