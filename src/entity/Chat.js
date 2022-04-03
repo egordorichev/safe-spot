@@ -1,17 +1,15 @@
 import Entity from './Entity'
+const locale = require('../ru')
 
 export default class Chat extends Entity {
 	constructor() {
 		super()
 
 		this.lines = []
-
-		this.print("Hello")
-		this.print("World")
 	}
 
 	print(text) {
-		this.lines.push([ text, 10 ])
+		this.lines.push([ locale[text], 10 ])
 	}
 
 	renderUi(p5, canvas) {
@@ -20,7 +18,7 @@ export default class Chat extends Entity {
 		p5.fill(255)
 		p5.noStroke()
 		p5.strokeWeight(100)
-		p5.textSize(48)
+		p5.textSize(24)
 
 		let j = 0
 
@@ -29,7 +27,7 @@ export default class Chat extends Entity {
 
 			p5.fill(255, 255, 255, line[1] * 255)
 
-			p5.text(line[0], -p5.windowWidth / 2 + 10, p5.windowHeight / 2 - 10 - (j++) * 48)
+			p5.text(line[0], -p5.windowWidth / 2 + 10, p5.windowHeight / 2 - 10 - (j++) * 24)
 
 			if (line[1] <= 0) {
 				this.lines.splice(i, 1)
